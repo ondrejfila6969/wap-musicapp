@@ -6,9 +6,18 @@ var logger = require('morgan');
 
 const cors = require("cors");
 const mongoose = require("mongoose");
+mongoose
+.connect(`mongodb+srv://admin:adminadmin@cluster0.zymn1.mongodb.net/?retryWrites=true&w=majority&appName=cluster0`)
+.then(() => {
+  console.log("Database connected")})
+.catch((err) => {console.log(err)});
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const playlistRouter = require("./routes/playlist/playlist");
+const songRouter = require("./routes/song/song");
+const userRouter = require("./routes/user/user");
+
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -21,9 +30,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+app.use("/user", userRouter);
+app.use("/playlist", playlistRouter);
+app.use("/song", songRouter);
 
 app.use(function(req, res, next) {
   next(createError(404));
