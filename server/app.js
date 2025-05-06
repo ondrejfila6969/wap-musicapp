@@ -37,6 +37,9 @@ app.use("/user", userRouter);
 app.use("/playlist", playlistRouter);
 app.use("/song", songRouter);
 
+app.use("/pfps", express.static(path.join(__dirname, `../public/pfps/`)));
+app.use("/songs", express.static(path.join(__dirname, `../public/songs/`)));
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
