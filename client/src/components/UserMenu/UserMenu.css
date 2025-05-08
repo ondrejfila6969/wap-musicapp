@@ -1,0 +1,7 @@
+.userMenu-wrapper{
+    background: linear-gradient(0deg,rgba(8, 8, 8, 1) 0%, rgb(17, 17, 17) 100%);
+}
+
+.userMenu-wrapper:hover{
+    background: linear-gradient(0deg,rgba(8, 8, 8, 1) 0%, rgb(63, 63, 63) 100%);
+}

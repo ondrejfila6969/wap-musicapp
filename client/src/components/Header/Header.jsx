@@ -1,12 +1,17 @@
-import React from 'react'
-import SearchBar from '../SearchBar/SearchBar'
+import React from "react";
+import SearchBar from "../SearchBar/SearchBar";
+import UserMenu from "../UserMenu/UserMenu";
 
 export default function Header() {
   return (
     <>
-        <div title='logo'></div>
-        <SearchBar />
-        <div title='utility'></div>
+      <div className="flex justify-between items-center mb-4">
+        <img className="h-12" src="logo.png"></img>
+        <div class="flex gap-4 items-center">
+          <SearchBar />
+          <UserMenu />
+        </div>
+      </div>
     </>
-  )
+  );
 }

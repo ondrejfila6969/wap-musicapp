@@ -4,7 +4,7 @@ import { FastAverageColor } from "fast-average-color";
 import "./Player.css"
 
 
-export default function MusicPlayer({ albumArtUrl, title, artist, songLength }) {
+export default function Player({ albumArtUrl, title, artist, songLength }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [avgColor, setAvgColor] = useState("#000000");
 
@@ -17,8 +17,8 @@ export default function MusicPlayer({ albumArtUrl, title, artist, songLength }) 
 
   return (
     <div
-      className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex gap-4"
-      style={{ background: `linear-gradient(to top, ${avgColor}, #111)` }}
+      className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex gap-4 font-body"
+      style={{ background: `linear-gradient(to top, #080808, ${avgColor})` }}
     >
       <div
         className={`w-32 h-32 relative ${isPlaying ? "rotating" : "rotating paused"}`}

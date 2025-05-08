@@ -1,5 +1,17 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utulities;
+
+
+
+
+
 body{
-    background-color: #1C1A1A;
+    background-color: rgb(8, 8, 8);
+    font-family: "Old Standart TT";
+    font-weight: regular;
 }
