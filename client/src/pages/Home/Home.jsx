@@ -1,25 +1,10 @@
-import Header from "../../components/Header/Header";
-import Library from "../../components/Library/Library";
-import MainContent from "../../components/MainContent/MainContent";
-import Player from "../../components/Player/Player";
+import React from "react";
 
 export default function Home() {
   return (
-    <>
-      <div className="md:min-h-screen text-white p-4">
-        <Header />
-        <div className="grid grid-rows md:grid-cols-[75%_1fr] gap-4 h-[calc(100vh-6rem)]">
-          <MainContent />
-          <div className="flex flex-col gap-4">
-            <Library />
-            <Player
-              albumArtUrl={"albumCoverExample.png"}
-              artist={"Jablotron"}
-              title={"Dreams"}
-            />
-          </div>
-        </div>
-      </div>
-    </>
+    <div className="text-white p-8">
+      <h1 className="text-3xl font-bold mb-4">Welcome to SONUS</h1>
+      <p className="text-lg">Explore trending tracks, albums, and more.</p>
+    </div>
   );
 }

@@ -7,7 +7,7 @@ export default function Header() {
     <>
       <div className="flex justify-between items-center mb-4">
         <img className="h-12 ml-5" src="logo.png"></img>
-        <div class="flex gap-4 items-center">
+        <div className="flex gap-4 items-center">
           <SearchBar />
           <UserMenu />
         </div>

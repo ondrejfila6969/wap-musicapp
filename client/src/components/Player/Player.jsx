@@ -45,11 +45,11 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
         <input type="range" step="1" max={songLength} className="w-full my-2 accent-gray-500 cursor-pointer" />
 
         <div className="flex justify-center gap-6 mt-1">
-          <SkipBack />
+          <SkipBack cursor={"pointer"}/>
           <button onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? <Pause /> : <Play />}
+            {isPlaying ? <Pause cursor={"pointer"}/> : <Play cursor={"pointer"}/>}
           </button>
-          <SkipForward />
+          <SkipForward cursor={"pointer"}/>
         </div>
       </div>
     </div>

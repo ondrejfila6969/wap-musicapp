@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,9 +28,23 @@ export default function UserMenu() {
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg">
           <ul className="py-2">
-            <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">Profile</li>
-            <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">Settings</li>
-            <li className="px-4 py-2 hover:bg-red-800 cursor-pointer bg-red-900">Logout</li>
+            <Link to={"/profile"}>
+              <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">
+                Profile
+              </li>
+            </Link>
+
+            <Link to={"/settings"}>
+              <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">
+                Settings
+              </li>
+            </Link>
+
+            <Link to={"/"}>
+              <li className="px-4 py-2 hover:bg-red-800 cursor-pointer bg-red-900">
+                Log Out
+              </li>
+            </Link>
           </ul>
         </div>
       )}

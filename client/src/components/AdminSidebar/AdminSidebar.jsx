@@ -11,7 +11,7 @@ export default function AdminSidebar() {
 
           <nav className="flex flex-col gap-2 text-lg text-gray-300">
 
-            <Link to={"#"}>
+            <Link to={"/"}>
               <div className="hover:text-white">Manage Users</div>
             </Link>
             <Link to={"#"}>
