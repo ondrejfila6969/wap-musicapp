@@ -8,7 +8,9 @@
 
 
 
-
+@utility sonus-bg-linear-gradient {
+  background: linear-gradient(0deg,rgba(8, 8, 8, 1) 0%, rgb(17, 17, 17) 100%);
+}
 
 body{
     background-color: rgb(8, 8, 8);

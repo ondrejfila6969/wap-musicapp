@@ -1,19 +1,29 @@
 import React from "react";
-import "./RegisterForm.css"
 import { Link } from "react-router-dom";
 
 export default function RegisterForm() {
   return (
-    <div className="flex justify-center items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
-      <div className="registerForm-wrapper bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md">
+    <div className="flex justify-left items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
+      <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md">
         <form className="flex flex-col gap-4">
           <div>
-            <label htmlFor="id" className="block mb-1 text-sm">
-              ID
+            <label htmlFor="username" className="block mb-1 text-sm">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block mb-1 text-sm">
+              Email
             </label>
             <input
               id="id"
-              type="text"
+              type="email"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
             />
           </div>
