@@ -27,7 +27,7 @@ export default function UserMenu() {
 
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg">
-          <ul className="py-2">
+          <ul className="py-2" onClick={() => setIsOpen((prev) => !prev)}>
             <Link to={"/profile"}>
               <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">
                 Profile

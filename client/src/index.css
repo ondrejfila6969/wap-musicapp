@@ -16,4 +16,6 @@ body{
     background-color: rgb(8, 8, 8);
     font-family: "Old Standart TT";
     font-weight: regular;
+    user-select: none;
+    font-weight:lighter;
 }

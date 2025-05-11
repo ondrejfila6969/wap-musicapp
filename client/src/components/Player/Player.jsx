@@ -38,8 +38,8 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
 
       <div className="flex flex-col flex-1 text-white">
         <div>
-          <h2 className="text-xl font-semibold">{title}</h2>
-          <p className="text-sm opacity-80">{artist}</p>
+          <h2 className="text-2xl">{title}</h2>
+          <p className="text-lm">{artist}</p>
         </div>
 
         <input type="range" step="1" max={songLength} className="w-full my-2 accent-gray-500 cursor-pointer" />
