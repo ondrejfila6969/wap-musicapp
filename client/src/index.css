@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Doto:wght@100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
 @import "tailwindcss";
 
@@ -10,6 +10,11 @@
 
 @utility sonus-bg-linear-gradient {
   background: linear-gradient(0deg,rgba(8, 8, 8, 1) 0%, rgb(17, 17, 17) 100%);
+}
+
+@utility font-doto {
+  font-family: "Doto";
+  font-weight: 500;
 }
 
 body{

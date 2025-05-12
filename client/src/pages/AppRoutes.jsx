@@ -9,6 +9,7 @@ import AdminHome from "./Admin/AdminHome";
 import ManageUsers from "./Admin/ManageUsers";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import Settings from "./Settings/Settings";
+import CreatePlaylist from "./CreatePlaylist/CreatePlaylist";
 
 export default function AppRoutes() {
   return (
@@ -18,11 +19,12 @@ export default function AppRoutes() {
           <Route path="/" element={<Layout />}>
             <Route index path="/" element={<Home />} />
             <Route path="*" element={<Error />} />
-            <Route path="signin" element={<SignInPage />} />
-            <Route path="register" element={<RegisterPage />} />
+            <Route path="createPlaylist" element={<CreatePlaylist />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="settings" element={<Settings />} />
           </Route>
+          <Route path="signin" element={<SignInPage />} />
+          <Route path="register" element={<RegisterPage />} />
           <Route path="/admin/*" element={<AdminLayout />}>
             <Route index element={<AdminHome />} />
              {/*<Route path="/manageUsers" element={<ManageUsers />} /> */}

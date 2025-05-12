@@ -36,7 +36,7 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
         />
       </div>
 
-      <div className="flex flex-col flex-1 text-white">
+      <div className="flex flex-col flex-1 text-white font-doto">
         <div>
           <h2 className="text-2xl">{title}</h2>
           <p className="text-lm">{artist}</p>
