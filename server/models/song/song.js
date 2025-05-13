@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const songSchema = mongoose.Schema({
   artistId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "User",
     required: true,
   },

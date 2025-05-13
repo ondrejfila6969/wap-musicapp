@@ -8,7 +8,11 @@ const playlistSchema = mongoose.Schema({
   },
   name: { type: String, required: true },
   songs: { type: [mongoose.Schema.Types.ObjectId], ref: "Song", default: [] },
-  type: { type: "album" | "playlist", required: true },
+  type: {
+    type: String,
+    enum: ["album", "playlist"],
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Playlist", playlistSchema);
