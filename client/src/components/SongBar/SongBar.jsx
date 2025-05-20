@@ -5,7 +5,7 @@ import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 import { useState } from "react";
 
-export default function SongBar() {
+export default function SongBar({id, title, artist, duration}) {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const songNumber = 1;
@@ -17,16 +17,16 @@ export default function SongBar() {
     >
       <div className="flex items-center gap-4">
         <div className="w-4 h-4 flex items-center justify-center text-white">
-          {hovered ? <PlayIcon className="w-4 h-4 cursor-pointer" /> : <span>{songNumber}</span>}
+          {hovered ? <PlayIcon className="w-4 h-4 cursor-pointer" /> : <span>{id}</span>}
         </div>
         <div>
-          <div className="font-semibold">idk</div>
-          <div className="text-neutral-400 text-xs">idk</div>
+          <div className="font-semibold">{title}</div>
+          <div className="text-neutral-400 text-xs">{artist}</div>
         </div>
       </div>
       <div className="flex items-center gap-2 text-neutral-400 text-xs ">
         {hovered && <PlusCircleIcon className="w-4 h-4 text-white cursor-pointer mr-2" />}
-        <span>3:20</span>
+        <span>{duration}</span>
       </div>
     </div>
 
