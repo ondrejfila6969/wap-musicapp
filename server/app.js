@@ -17,6 +17,7 @@ const usersRouter = require('./routes/users');
 const playlistRouter = require("./routes/playlist/playlist");
 const songRouter = require("./routes/song/song");
 const userRouter = require("./routes/user/user");
+const userAuthRouter = require("./routes/userAuth/userAuth");
 
 const app = express();
 
@@ -30,15 +31,24 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/songs', express.static(path.join(__dirname, 'public/songs')));
 
-app.use("/user", userRouter);
-app.use("/playlist", playlistRouter);
-app.use("/song", songRouter);
+app.listen(5000, () => {
+  console.log('Server listening on port 5000');
+});
+
+app.use('/', indexRouter);
+app.use('/api/users', usersRouter);
+
+app.use("/api/user", userRouter);
+app.use("/api/userAuth", userAuthRouter);
+app.use("/api/playlist", playlistRouter);
+app.use("/api/song", songRouter);
 
 app.use("/pfps", express.static(path.join(__dirname, `../public/pfps/`)));
 app.use("/songs", express.static(path.join(__dirname, `../public/songs/`)));
+
+
 
 app.use(function(req, res, next) {
   next(createError(404));
