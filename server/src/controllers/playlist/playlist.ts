@@ -1,6 +1,7 @@
-const Playlist = require("../../models/playlist/playlist");
+import { Request, Response, NextFunction } from "express";
+import Playlist from "../../models/playlist/playlist";
 
-exports.getAllPlaylists = async (req, res, next) => {
+export const getAllPlaylists = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await Playlist.find();
     if (data && data.length !== 0) {
@@ -17,7 +18,7 @@ exports.getAllPlaylists = async (req, res, next) => {
   }
 };
 
-exports.getPlaylistById = async (req, res, next) => {
+export const getPlaylistById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = await Playlist.findById(req.params.id);
     if (data) {
@@ -34,7 +35,7 @@ exports.getPlaylistById = async (req, res, next) => {
   }
 };
 
-exports.createPlaylist = async (req, res, next) => {
+export const createPlaylist = async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.params;
   const { albumName } = req.body;
   try {
@@ -59,12 +60,12 @@ exports.createPlaylist = async (req, res, next) => {
   }
 };
 
-exports.updatePlaylist = async (req, res, next) => {
+export const updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const data = {
       name: req.body.name,
     };
-    const result = await Playlist.findByIdAndUpdate(req.params.id, data);
+    const result = await Playlist.findByIdAndUpdate(req.params.id, data, { new: true });
     if (result) {
       return res.status(200).send({
         message: "Playlist updated",
@@ -79,7 +80,7 @@ exports.updatePlaylist = async (req, res, next) => {
   }
 };
 
-exports.deletePlaylist = async (req, res, next) => {
+export const deletePlaylist = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await Playlist.findByIdAndDelete(req.params.id);
     if (result) {
