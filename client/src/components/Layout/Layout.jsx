@@ -7,7 +7,7 @@ import Player from "../Player/Player";
 
 export default function Layout() {
   return (
-    <div className="md:min-h-screen text-white p-4">
+    <div className="md:min-h-screen text-white p-4 grid h-screen">
       <Header />
       <div className="grid grid-rows md:grid-cols-[75%_1fr] gap-4 h-[calc(100vh-6rem)]">
         <MainContent />
