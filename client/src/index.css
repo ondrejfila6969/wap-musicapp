@@ -9,7 +9,7 @@
 
 
 @utility sonus-bg-linear-gradient {
-  background: linear-gradient(0deg,rgba(8, 8, 8, 1) 0%, rgb(17, 17, 17) 100%);
+  background: linear-gradient(0deg, rgba(8, 8, 8, 1) 0%, rgb(17, 17, 17) 100%);
 }
 
 @utility font-doto {
@@ -17,10 +17,25 @@
   font-weight: 500;
 }
 
-body{
-    background-color: rgb(8, 8, 8);
-    font-family: "Old Standart TT";
-    font-weight: regular;
-    user-select: none;
-    font-weight:lighter;
+body {
+  background-color: rgb(8, 8, 8);
+  font-family: "Old Standart TT";
+  font-weight: regular;
+  user-select: none;
+  font-weight: lighter;
+}
+
+body::-webkit-scrollbar {
+  width: var(5px)
+}
+
+body::-webkit-scrollbar-track {
+  background: var(#333333);
+  border-radius: 20px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: var(#333333);
+  border-radius: 20px;
+
 }

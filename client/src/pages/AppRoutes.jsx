@@ -10,6 +10,7 @@ import ManageUsers from "./Admin/ManageUsers";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import Settings from "./Settings/Settings";
 import CreatePlaylist from "./CreatePlaylist/CreatePlaylist";
+import SearchResult from "./SearchResult/SearchResult";
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
             <Route path="createPlaylist" element={<CreatePlaylist />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="search" element={<SearchResult />} />
           </Route>
           <Route path="signin" element={<SignInPage />} />
           <Route path="register" element={<RegisterPage />} />

@@ -1,19 +1,46 @@
 import { useEffect, useRef, useState } from "react";
+import { Howl } from "howler";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { FastAverageColor } from "fast-average-color";
-import "./Player.css"
-
+import "./Player.css";
 
 export default function Player({ albumArtUrl, title, artist, songLength }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [avgColor, setAvgColor] = useState("#000000");
+  const soundRef = useRef(null);
 
   useEffect(() => {
     const fac = new FastAverageColor();
-    fac.getColorAsync(albumArtUrl).then(color => {
+    fac.getColorAsync(albumArtUrl).then((color) => {
       setAvgColor(color.hex);
     });
   }, [albumArtUrl]);
+
+  // Inicializace skladby – přehraj např. "/songs/example.mp3"
+  useEffect(() => {
+    soundRef.current = new Howl({
+      src: ["http://localhost:5000/songs/1.mp3"],
+      html5: true, // důležité pro delší skladby a mobilní podporu
+    });
+
+    return () => {
+      // při odmountování komponenty ukončit a vyčistit
+      soundRef.current?.unload();
+    };
+  }, []);
+
+  const togglePlayback = () => {
+    const sound = soundRef.current;
+    if (!sound) return;
+
+    if (isPlaying) {
+      sound.pause();
+    } else {
+      sound.play();
+    }
+
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <div
@@ -28,7 +55,6 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
           alt="Vinyl"
           className="absolute w-full h-full object-contain"
         />
-
         <img
           src={albumArtUrl}
           alt="Album"
@@ -42,14 +68,19 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
           <p className="text-lm">{artist}</p>
         </div>
 
-        <input type="range" step="1" max={songLength} className="w-full my-2 accent-gray-500 cursor-pointer" />
+        <input
+          type="range"
+          step="1"
+          max={songLength}
+          className="w-full my-2 accent-gray-500 cursor-pointer"
+        />
 
         <div className="flex justify-center gap-6 mt-1">
-          <SkipBack cursor={"pointer"}/>
-          <button onClick={() => setIsPlaying(!isPlaying)}>
-            {isPlaying ? <Pause cursor={"pointer"}/> : <Play cursor={"pointer"}/>}
+          <SkipBack cursor={"pointer"} />
+          <button onClick={togglePlayback}>
+            {isPlaying ? <Pause cursor={"pointer"} /> : <Play cursor={"pointer"} />}
           </button>
-          <SkipForward cursor={"pointer"}/>
+          <SkipForward cursor={"pointer"} />
         </div>
       </div>
     </div>

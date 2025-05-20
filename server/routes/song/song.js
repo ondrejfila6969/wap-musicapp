@@ -4,7 +4,7 @@ const songControllers = require("../../controllers/song/song");
 
 router.get('/', songControllers.getAllSongs);
 router.get('/:id', songControllers.getSongById);
-router.post('/', songControllers.createSong);
+router.post('/:userid', songControllers.createSong);
 router.put('/:id', songControllers.updateSong);
 router.delete('/:id', songControllers.deleteSong);
 
