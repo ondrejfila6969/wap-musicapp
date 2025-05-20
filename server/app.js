@@ -30,6 +30,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+app.use('/songs', express.static(path.join(__dirname, 'public/songs')));
+
+app.listen(5000, () => {
+  console.log('Server listening on port 5000');
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
