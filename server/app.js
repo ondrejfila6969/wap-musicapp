@@ -38,12 +38,12 @@ app.listen(5000, () => {
 });
 
 app.use('/', indexRouter);
-app.use('/api/users', usersRouter);
+app.use('/users', usersRouter);
 
-app.use("/api/user", userRouter);
-app.use("/api/userAuth", userAuthRouter);
-app.use("/api/playlist", playlistRouter);
-app.use("/api/song", songRouter);
+app.use("/user", userRouter);
+app.use("/userAuth", userAuthRouter);
+app.use("/playlist", playlistRouter);
+app.use("/song", songRouter);
 
 app.use("/pfps", express.static(path.join(__dirname, `../public/pfps/`)));
 app.use("/songs", express.static(path.join(__dirname, `../public/songs/`)));
