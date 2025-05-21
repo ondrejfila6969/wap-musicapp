@@ -2,10 +2,9 @@ import React from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
-
 import { useState } from "react";
 
-export default function SongBar({ id, title, artist, duration }) {
+export default function SongBar({id, title, artist, duration}) {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   return (
