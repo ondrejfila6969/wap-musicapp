@@ -1,7 +1,6 @@
 import React from "react";
 import SongBar from "../../components/SongBar/SongBar";
 
-
 export default function Home() {
   const songs = [
     { title: "Bohemian Rhapsody", artist: "Queen", duration: "5:55" },

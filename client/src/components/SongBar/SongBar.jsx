@@ -2,13 +2,11 @@ import React from "react";
 import { PlayIcon } from "@heroicons/react/24/solid";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
-
 import { useState } from "react";
 
 export default function SongBar({id, title, artist, duration}) {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const songNumber = 1;
   return (
         <div
       className="flex items-center justify-between px-4 py-2 hover:bg-neutral-800 transition-colors text-white text-sm"
