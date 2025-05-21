@@ -54,13 +54,14 @@ export const createSong = [
 
     const user = await User.findById(userid);
     if (!user) {
-      return res.status(404).send("User not found");
+      return res.status(404).json({ message:"User not found" });
     }
 
     const album = await Playlist.findById(albumid);
     const albumCover = album?.cover;
 
     try {
+
       const duration = await getAudioDuration(
         path.join(__dirname, `../../../public/songs/${req.file.filename}`)
       );
@@ -68,7 +69,7 @@ export const createSong = [
       const song = new Song({
         uploadedby: userid,
         artistName: user.userName,
-        collabArtists,
+        collabArtists, // mozna predelat na string a dat akorat input na frontendu at tam nemusim davat kokotiny jak picus i kdyz jsou zbytecny ale nefungoval by proklik, ale stejne by nefugoval asi protoze bych nejdriv musel dat search databaze pak se kouknout idk jak to udelam zeptej se ostatnich proste
         songCover: albumCover,
         songName,
         songSrc: "http://localhost:3000/songs/" + req.file.filename,
