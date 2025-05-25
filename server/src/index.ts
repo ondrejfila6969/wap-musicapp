@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 mongoose
   .connect(
-    "mongodb+srv://admin:adminadmin@cluster0.zymn1.mongodb.net/?retryWrites=true&w=majority&appName=cluster0"
+    process.env.MONGO_URL
   )
   .then(() => {
     console.log("Database connected");
