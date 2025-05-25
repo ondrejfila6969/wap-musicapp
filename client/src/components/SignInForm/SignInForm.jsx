@@ -1,19 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
+import { loginUser } from "../../models/user";
 
 export default function SignInForm() {
+  const [formData, setFormData] = useState();
+  const [info, setInfo] = useState();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const sendData = async () => {
+    const res = await loginUser(formData);
+    if(res.status === 200) {
+      login(res.token);
+      navigate("/");
+    }
+    setInfo(res.message);
+  }
+
+  const handleInput = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }))
+  }
+
+  const handleButton = (e) => {
+    e.preventDefault();
+    sendData();
+  }
+
   return (
     <div className="flex justify-left items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
       <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md">
         <form className="flex flex-col gap-4">
           <div>
-            <label htmlFor="username" className="block mb-1 text-sm">
-              Username
+            <label htmlFor="email" className="block mb-1 text-sm">
+              Email
             </label>
             <input
-              id="username"
-              type="text"
+              type="email"
+              name="email"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+              onChange={handleInput}
             />
           </div>
 
@@ -22,15 +52,16 @@ export default function SignInForm() {
               Password
             </label>
             <input
-              id="password"
               type="password"
+              name="password"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+              onChange={handleInput}
             />
           </div>
 
           <button
-            type="submit"
             className="bg-gradient-to-r from-gray-900 to-green-900 rounded-full py-2 font-semibold text-white hover:opacity-90 transition cursor-pointer"
+            onClick={handleButton}
           >
             Sign-In
           </button>
@@ -43,6 +74,7 @@ export default function SignInForm() {
           </p>
         </form>
       </div>
+      <p>{info}</p>
     </div>
   );
 }

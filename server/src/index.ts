@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 mongoose
   .connect(
-    "mongodb+srv://admin:adminadmin@cluster0.zymn1.mongodb.net/?retryWrites=true&w=majority&appName=cluster0"
+    process.env.MONGO_URL
   )
   .then(() => {
     console.log("Database connected");
@@ -52,6 +52,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 });
 
 // Start the server
-app.listen(5000, () => {
-  console.log("Server listening on port 5000");
+app.listen(3000, () => {
+  console.log("Server listening on port 3000");
 });
