@@ -11,7 +11,7 @@ export default function LibraryHeader() {
         <p className="ml-2">Library</p>
       </div>
       <div className="w-10 h-10 cursor-pointer flex items-center justify-center">
-        <Link to={"/createPlaylist"}>
+        <Link to={"/createAlbum"}>
           <ListPlus />
         </Link>
       </div>

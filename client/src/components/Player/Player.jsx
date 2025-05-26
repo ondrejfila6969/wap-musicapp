@@ -1,14 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+import { Howl } from "howler";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { FastAverageColor } from "fast-average-color";
 import "./Player.css";
 
-export default function Player({ albumArtUrl, title, artist }) {
-  const audioRef = useRef(null);
+export default function Player({ albumArtUrl, title, artist, songLength }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [avgColor, setAvgColor] = useState("#000000");
-  const [songLength, setSongLength] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
+  const soundRef = useRef(null);
 
   useEffect(() => {
     const fac = new FastAverageColor();
@@ -18,45 +17,37 @@ export default function Player({ albumArtUrl, title, artist }) {
   }, [albumArtUrl]);
 
   useEffect(() => {
-    const audio = audioRef.current;
-    if (audio) {
-      const handleLoadedMetadata = () => {
-        setSongLength(Math.floor(audio.duration));
-      };
-      const handleTimeUpdate = () => {
-        setCurrentTime(audio.currentTime);
-      };
-
-      audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-      audio.addEventListener("timeupdate", handleTimeUpdate);
-
-      return () => {
-        audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-        audio.removeEventListener("timeupdate", handleTimeUpdate);
-      };
+    if (soundRef.current) {
+      soundRef.current.stop();
+      soundRef.current.unload();
     }
+
+    const sound = new Howl({
+      src: ["http://localhost:3000/songs/1.mp3"],
+      html5: true,
+      onload: () => {
+      },
+    });
+
+    soundRef.current = sound;
+
+    return () => {
+      sound.stop();
+      sound.unload();
+    };
   }, []);
 
   const togglePlayback = () => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    const sound = soundRef.current;
+    if (!sound) return;
 
     if (isPlaying) {
-      audio.pause();
+      sound.pause();
     } else {
-      audio.play();
+      sound.play();
     }
 
     setIsPlaying(!isPlaying);
-  };
-
-  const handleSeek = (e) => {
-    const audio = audioRef.current;
-    if (audio) {
-      const time = Number(e.target.value);
-      audio.currentTime = time;
-      setCurrentTime(time);
-    }
   };
 
   return (
@@ -64,8 +55,6 @@ export default function Player({ albumArtUrl, title, artist }) {
       className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex gap-4 font-body"
       style={{ background: `linear-gradient(to top, #080808, ${avgColor})` }}
     >
-      <audio ref={audioRef} src="http://localhost:3000/songs/1.mp3" preload="metadata" />
-
       <div
         className={`w-32 h-32 relative ${isPlaying ? "rotating" : "rotating paused"}`}
       >
@@ -90,19 +79,16 @@ export default function Player({ albumArtUrl, title, artist }) {
         <input
           type="range"
           step="1"
-          min="0"
           max={songLength}
-          value={currentTime}
-          onChange={handleSeek}
           className="w-full my-2 accent-gray-500 cursor-pointer"
         />
 
         <div className="flex justify-center gap-6 mt-1">
-          <SkipBack cursor="pointer" />
+          <SkipBack cursor={"pointer"} />
           <button onClick={togglePlayback}>
-            {isPlaying ? <Pause cursor="pointer" /> : <Play cursor="pointer" />}
+            {isPlaying ? <Pause cursor={"pointer"} /> : <Play cursor={"pointer"} />}
           </button>
-          <SkipForward cursor="pointer" />
+          <SkipForward cursor={"pointer"} />
         </div>
       </div>
     </div>

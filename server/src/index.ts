@@ -30,9 +30,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/songs", express.static(path.join(__dirname, "../public/songs")));
 app.use("/pfps", express.static(path.join(__dirname, "../public/pfps/")));
 
-app.use("/user", userRouter);
-app.use("/playlist", playlistRouter);
-app.use("/song", songRouter);
+app.use("/api/user", userRouter);
+app.use("/api/playlist", playlistRouter);
+app.use("/api/song", songRouter);
 
 // Catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {

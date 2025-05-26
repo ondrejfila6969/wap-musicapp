@@ -48,7 +48,7 @@ export const createSong = [
     const { userid, albumid } = req.params;
     const { songName, collabArtists, yearOfRelease } = req.body;
 
-    if (!userid || !songName || !collabArtists || !yearOfRelease) {
+    if (!userid || !songName || !yearOfRelease) {
       return res.status(404).json({ message: "Missing data" });
     }
 
@@ -69,7 +69,7 @@ export const createSong = [
       const song = new Song({
         uploadedby: userid,
         artistName: user.userName,
-        collabArtists, // mozna predelat na string a dat akorat input na frontendu at tam nemusim davat kokotiny jak picus i kdyz jsou zbytecny ale nefungoval by proklik, ale stejne by nefugoval asi protoze bych nejdriv musel dat search databaze pak se kouknout idk jak to udelam zeptej se ostatnich proste
+        collabArtists,    
         songCover: albumCover,
         songName,
         songSrc: "http://localhost:3000/songs/" + req.file.filename,

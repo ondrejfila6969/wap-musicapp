@@ -1,5 +1,33 @@
 import { Request, Response, NextFunction } from "express";
 import Playlist from "../../models/playlist/playlist";
+import User from "../../models/user/user";
+import fs from "fs";
+import path from "path";
+
+export const saveFileIntoFolder = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  userPfp(req, res, (err: any) => {
+    if (err) {
+      //console.log(err);
+      return res.status(500).json({message:"Invalid file format"});
+    }
+    next();
+  });
+};
+
+export const deletePhoto = async (filePath: string) =>{
+  if(filePath === path.join(__dirname, `../../../public/albumCovers/Default_cover.png`)) return;
+  try {
+    await fs.promises.unlink(filePath);
+  } catch (err) {
+    console.log("Error with Deleting Image / Video")
+    console.error(err); 
+  }
+}
+
 
 export const getAllPlaylists = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -35,14 +63,21 @@ export const getPlaylistById = async (req: Request, res: Response, next: NextFun
   }
 };
 
-export const createPlaylist = async (req: Request, res: Response, next: NextFunction) => {
+export const createPlaylist = [saveFileIntoFolder async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.params;
   const { albumName } = req.body;
+
+    if (!req.file) {
+      req.file = { filename: "Default_pfp.png" } as Express.Multer.File;
+   }
+  const existingUser = await User.findOneById(userId);
+  if(!existingUser) return res.status(404).send({message: "User not found"})
+    
   try {
     const data = new Playlist({
       userId,
       name: albumName,
-      type: "playlist",
+      type: "album",
       cover: "http://localhost:3000/albumCovers/Default_cover.png"
     });
     const result = await data.save();
@@ -58,7 +93,7 @@ export const createPlaylist = async (req: Request, res: Response, next: NextFunc
   } catch (e) {
     res.status(500).send(e);
   }
-};
+};]
 
 export const updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
   try {

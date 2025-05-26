@@ -12,9 +12,8 @@ const songSchema = mongoose.Schema({
     required: true,
   },
   collabArtists: {
-    type: [String],
-    ref: "User",
-    default: [],
+    type: String,
+    default: "",
   },
   songCover: { type: String, required: true },
   songName: { type: String, required: true },

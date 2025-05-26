@@ -9,8 +9,8 @@ import AdminHome from "./Admin/AdminHome";
 import ManageUsers from "./Admin/ManageUsers";
 import ProfilePage from "./ProfilePage/ProfilePage";
 import Settings from "./Settings/Settings";
-import CreatePlaylist from "./CreatePlaylist/CreatePlaylist";
 import SearchResult from "./SearchResult/SearchResult";
+import CreateAlbum from "./CreateAlbum/CreateAlbum";
 
 export default function AppRoutes() {
   return (
@@ -19,7 +19,7 @@ export default function AppRoutes() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="*" element={<Error />} />
-            <Route path="createPlaylist" element={<CreatePlaylist />} />
+            <Route path="createAlbum" element={<CreateAlbum />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="search" element={<SearchResult />} />
