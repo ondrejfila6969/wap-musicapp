@@ -19,7 +19,7 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
   // Inicializace skladby – přehraj např. "/songs/example.mp3"
   useEffect(() => {
     soundRef.current = new Howl({
-      src: ["http://localhost:5000/songs/1.mp3"],
+      src: ["http://localhost:3000/songs/1.mp3"],
       html5: true, // důležité pro delší skladby a mobilní podporu
     });
 
