@@ -12,13 +12,11 @@ export const saveFileIntoFolder = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log("Uploading album cover...");
   albumCover(req, res, (err: any) => {
     if (err) {
-      console.error("Multer error:", err); // Add this
+      console.error("Multer error:", err);
       return res.status(500).json({ message: err.message || "File upload error" });
     }
-    console.log("File uploaded successfully:", req.file?.filename); // Log file name
     next();
   });
 
@@ -79,14 +77,12 @@ export const createAlbum = [saveFileIntoFolder, async (req: Request, res: Respon
   //const existingUser = await User.findOneById(userId);
   //if(!existingUser) return res.status(404).send({message: "User not found"})
     const data = new Playlist({
-      userId: userId,
+      userId: userId, //change this in model to object id in model when userauth is working
       name: albumName,
       type: "album",  
       cover: `http://localhost:3000/albumCovers/${coverFile}`
     });
-    console.log(data)
     const result = await data.save();
-    console.log("eee")
     if (result) {
       return res.status(201).send({
         message: "Playlist created",

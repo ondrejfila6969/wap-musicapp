@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const songSchema = mongoose.Schema({
   uploadedby: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
     ref: "User",
     required: true,
   },

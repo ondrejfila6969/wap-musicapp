@@ -7,9 +7,13 @@ import User from "../../models/user/user";
 import songFileController from "./songUpload";
 import Playlist from "../../models/playlist/playlist";
 
-const songFile = songFileController.single("songUpload");
+const songFile = songFileController.single("songFile");
 
-const saveFileIntoFolder = (req: Request, res: Response, next: NextFunction): void => {
+const saveFileIntoFolder = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   songFile(req, res, (err: any) => {
     if (err) {
       return res.status(500).json({ message: "Invalid file format" });
@@ -17,7 +21,6 @@ const saveFileIntoFolder = (req: Request, res: Response, next: NextFunction): vo
     next();
   });
 };
-
 
 const getAudioDuration = async (filePath: string): Promise<number> => {
   try {
@@ -41,7 +44,10 @@ const deletePhoto = async (filePath: string): Promise<void> => {
 export const createSong = [
   saveFileIntoFolder,
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Song uploaded to folder");
+
     if (!req.file) {
+      console.log("no file")
       return res.status(500).json({ message: "File didn't upload" });
     }
 
@@ -52,24 +58,28 @@ export const createSong = [
       return res.status(404).json({ message: "Missing data" });
     }
 
+    console.log("no missing data");
+    /*
     const user = await User.findById(userid);
     if (!user) {
       return res.status(404).json({ message:"User not found" });
     }
+      */
 
+    console.log(albumid);
     const album = await Playlist.findById(albumid);
     const albumCover = album?.cover;
 
     try {
-
       const duration = await getAudioDuration(
         path.join(__dirname, `../../../public/songs/${req.file.filename}`)
       );
 
+      console.log("before db");
       const song = new Song({
-        uploadedby: userid,
-        artistName: user.userName,
-        collabArtists,    
+        uploadedby: userid, //change this in model to object id in model when userauth is working
+        artistName: "e", //chanage change change cahanneehqeqwheqwheqwehqwehqwheqwehqwheqwehqwehqwhqwehqwheqwheqwheqwhe
+        collabArtists,
         songCover: albumCover,
         songName,
         songSrc: "http://localhost:3000/songs/" + req.file.filename,
@@ -78,11 +88,18 @@ export const createSong = [
       });
 
       await song.save();
+      console.log("after db");
+      await Playlist.findByIdAndUpdate(
+        album._id,
+        { $push: { songs: song._id } },
+        { new: true } 
+      );
       return res.status(200).send("Song created");
     } catch (error: any) {
       await deletePhoto(
         path.join(__dirname, `../../../public/songs/${req.file.filename}`)
       );
+      console.log(error);
       return res.status(500).json({
         message: "Error creating song",
         error: error.message,
@@ -91,7 +108,11 @@ export const createSong = [
   },
 ];
 
-export const getSongById = async (req: Request, res: Response, next: NextFunction) => {
+export const getSongById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const data = await Song.findById(req.params.id);
     if (data) {
@@ -106,10 +127,16 @@ export const getSongById = async (req: Request, res: Response, next: NextFunctio
   }
 };
 
-export const updateSong = async (req: Request, res: Response, next: NextFunction) => {
+export const updateSong = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const data = {}; // Add logic here to update specific fields from req.body
-    const result = await Song.findByIdAndUpdate(req.params.id, data, { new: true });
+    const result = await Song.findByIdAndUpdate(req.params.id, data, {
+      new: true,
+    });
     if (result) {
       return res.status(200).send({
         message: "Song updated",
@@ -122,7 +149,11 @@ export const updateSong = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const deleteSong = async (req: Request, res: Response, next: NextFunction) => {
+export const deleteSong = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await Song.findByIdAndDelete(req.params.id);
     if (result) {
