@@ -3,10 +3,10 @@ import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
 
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, destination: string) => void) {
     cb(null, path.join(__dirname, "../../../public/albumCovers"));
   },
-  filename: function (req, file, cb) {
+  filename: function (req: Request, file: Express.Multer.File, cb: (error: Error | null, filename: string) => void) {
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
@@ -23,14 +23,14 @@ const filter = (
   ) {
     cb(null, true);
   } else {
-    cb(new Error("Invalid file format. Only MP3 and WAV are allowed"));
+    cb(new Error("Invalid file format. Only Image formats are allowed"));
   }
 };
 
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 1024 * 1024 * 10, // 100MB
+    fileSize: 1024 * 1024 * 10, // 10MB
   },
   fileFilter: filter,
 });

@@ -22,6 +22,7 @@ body {
   font-family: "Old Standart TT";
   font-weight: regular;
   font-weight: lighter;
+  user-select: none;
 }
 
 body::-webkit-scrollbar {
