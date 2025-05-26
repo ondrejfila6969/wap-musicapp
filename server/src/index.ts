@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/songs", express.static(path.join(__dirname, "public/songs")));
+app.use("/songs", express.static(path.join(__dirname, "../public/songs")));
 app.use("/pfps", express.static(path.join(__dirname, "../public/pfps/")));
 
 app.use("/user", userRouter);
@@ -44,7 +44,6 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
   res.status(err.status || 500);
-  res.render("error");
 });
 
 // Start the server

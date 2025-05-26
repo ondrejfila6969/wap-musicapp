@@ -18,6 +18,7 @@ export default function Layout() {
             albumArtUrl={"albumCoverExample.png"}
             artist={"Jablotron"}
             title={"Dreams"}
+            songLength={100}
           />
         </div>
       </div>
