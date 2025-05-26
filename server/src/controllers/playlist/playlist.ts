@@ -3,19 +3,25 @@ import Playlist from "../../models/playlist/playlist";
 import User from "../../models/user/user";
 import fs from "fs";
 import path from "path";
+import albumCoverUpload from "./albumCoverUpload";
+
+const albumCover = albumCoverUpload.single("albumCoverFile");
 
 export const saveFileIntoFolder = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  userPfp(req, res, (err: any) => {
+  console.log("Uploading album cover...");
+  albumCover(req, res, (err: any) => {
     if (err) {
-      //console.log(err);
-      return res.status(500).json({message:"Invalid file format"});
+      console.error("Multer error:", err); // Add this
+      return res.status(500).json({ message: err.message || "File upload error" });
     }
+    console.log("File uploaded successfully:", req.file?.filename); // Log file name
     next();
   });
+
 };
 
 export const deletePhoto = async (filePath: string) =>{
@@ -63,24 +69,24 @@ export const getPlaylistById = async (req: Request, res: Response, next: NextFun
   }
 };
 
-export const createPlaylist = [saveFileIntoFolder async (req: Request, res: Response, next: NextFunction) => {
+export const createAlbum = [saveFileIntoFolder, async (req: Request, res: Response, next: NextFunction) => {
   const { userId } = req.params;
   const { albumName } = req.body;
 
-    if (!req.file) {
-      req.file = { filename: "Default_pfp.png" } as Express.Multer.File;
-   }
-  const existingUser = await User.findOneById(userId);
-  if(!existingUser) return res.status(404).send({message: "User not found"})
-    
   try {
+  const coverFile = req.file?.filename || "Default_cover.png";
+
+  //const existingUser = await User.findOneById(userId);
+  //if(!existingUser) return res.status(404).send({message: "User not found"})
     const data = new Playlist({
-      userId,
+      userId: userId,
       name: albumName,
-      type: "album",
-      cover: "http://localhost:3000/albumCovers/Default_cover.png"
+      type: "album",  
+      cover: `http://localhost:3000/albumCovers/${coverFile}`
     });
+    console.log(data)
     const result = await data.save();
+    console.log("eee")
     if (result) {
       return res.status(201).send({
         message: "Playlist created",
@@ -93,7 +99,7 @@ export const createPlaylist = [saveFileIntoFolder async (req: Request, res: Resp
   } catch (e) {
     res.status(500).send(e);
   }
-};]
+}]
 
 export const updatePlaylist = async (req: Request, res: Response, next: NextFunction) => {
   try {

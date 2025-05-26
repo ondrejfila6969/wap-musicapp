@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import api from "../../api"
+import api from "../../api";
 
 export default function CreateAlbum() {
   const [albumName, setAlbumName] = useState("");
@@ -13,18 +13,22 @@ export default function CreateAlbum() {
     songFile: null,
   });
 
-
-  const handleAlbumSubmit = async () => {
+  const handleAlbumSubmit = async (e) => {
+    e.preventDefault();
     const albumFormData = new FormData();
     albumFormData.append("albumName", albumName);
-    albumFormData.append("albumSrc", albumCover);
+    albumFormData.append("albumCoverFile", albumCover);
 
     try {
+      console.log("before album");
       const res = await api.post(
-        `http://localhost:3000/playlist/createAlbum`,
+        `/playlist/createAlbum/1`,
         albumFormData
       );
+      console.log("after album")
       const albumId = res.data._id;
+
+      console.log("next are songs");
 
       for (const song of songs) {
         const songFormData = new FormData();
@@ -34,7 +38,9 @@ export default function CreateAlbum() {
         songFormData.append("songSrc", song.songFile);
         songFormData.append("albumId", albumId);
 
+        console.log("before upload");
         await api.post(`/song/create/1/${albumId}`, songFormData);
+        console.log("after upload");
       }
     } catch (err) {
       console.error(err);
@@ -42,7 +48,8 @@ export default function CreateAlbum() {
     }
   };
 
-  const handleInsertSong = () => {
+  const handleInsertSong = (e) => {
+    e.preventDefault();
     setSongs([...songs, songForm]);
     setSongForm({
       songName: "",
@@ -58,6 +65,7 @@ export default function CreateAlbum() {
         <div className="flex flex-row">
           <input
             type="file"
+            name="albumCoverFile"
             className="bg-red-500 h-50 w-50 rounded-xl"
             onChange={(e) => setAlbumCover(e.target.files[0])}
           />

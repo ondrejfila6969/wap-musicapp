@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 mongoose
   .connect(
-    "mongodb+srv://admin:adminadmin@cluster0.zymn1.mongodb.net/?retryWrites=true&w=majority&appName=cluster0"
+    "mongodb+srv://admin:admin@cluster1.hsau5sp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1"
   )
   .then(() => {
     console.log("Database connected");
@@ -25,7 +25,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true, 
+}));
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/songs", express.static(path.join(__dirname, "../public/songs")));
 app.use("/pfps", express.static(path.join(__dirname, "../public/pfps/")));
