@@ -16,18 +16,31 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
     });
   }, [albumArtUrl]);
 
-  // Inicializace skladby – přehraj např. "/songs/example.mp3"
   useEffect(() => {
-    soundRef.current = new Howl({
-      src: ["http://localhost:5000/songs/1.mp3"],
-      html5: true, // důležité pro delší skladby a mobilní podporu
+    // Předchozí instanci zastavíme a uvolníme
+    if (soundRef.current) {
+      soundRef.current.stop();
+      soundRef.current.unload();
+    }
+
+    const sound = new Howl({
+      src: ["http://localhost:3000/songs/1.mp3"],
+      html5: true, // nutné pro spolehlivé přehrávání
+      onload: () => {
+        // Nastavíme délku skladby, pokud je k dispozici
+        if (songLength === undefined) {
+          setSongLength(Math.floor(sound.duration()));
+        }
+      },
     });
 
+    soundRef.current = sound;
+
     return () => {
-      // při odmountování komponenty ukončit a vyčistit
-      soundRef.current?.unload();
+      sound.stop();
+      sound.unload();
     };
-  }, []);
+  }, []); // Pokud budeš chtít měnit skladby, přidej sem trackUrl jako závislost
 
   const togglePlayback = () => {
     const sound = soundRef.current;

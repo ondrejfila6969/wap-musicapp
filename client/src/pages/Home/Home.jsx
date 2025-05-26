@@ -2,7 +2,7 @@ import React from "react";
 import SongBar from "../../components/SongBar/SongBar";
 
 export default function Home() {
-  const songs = [
+  /*const songs = [
     { title: "Bohemian Rhapsody", artist: "Queen", duration: "5:55" },
     { title: "Imagine", artist: "John Lennon", duration: "3:04" },
     { title: "Billie Jean", artist: "Michael Jackson", duration: "4:54" },
@@ -15,9 +15,14 @@ export default function Home() {
     { title: "Bohemian Rhapsody", artist: "Queen", duration: "5:55" },
     { title: "Imagine", artist: "John Lennon", duration: "3:04" },
     { title: "Billie Jean", artist: "Michael Jackson", duration: "4:54" },
-  ];
-
+  ];*/
   return (
+    <>
+      
+    </>
+  );
+
+  /*return (
     <div className="text-white h-auto p-8">
       <div className="text-3xl h-full overflow-y-auto space-y-2 pr-2">
         {songs.map((song, index) => (
@@ -30,5 +35,5 @@ export default function Home() {
         ))}
       </div>
     </div>
-  );
+  );*/
 }

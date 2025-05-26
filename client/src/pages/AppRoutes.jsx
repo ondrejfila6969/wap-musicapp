@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Home from "./Home/Home";
 import SignInPage from "./SignInPage/SignInPage";
 import RegisterPage from "./RegisterPage/RegisterPage";
@@ -15,10 +15,9 @@ import SearchResult from "./SearchResult/SearchResult";
 export default function AppRoutes() {
   return (
     <>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index path="/" element={<Home />} />
+            <Route index element={<Home />} />
             <Route path="*" element={<Error />} />
             <Route path="createPlaylist" element={<CreatePlaylist />} />
             <Route path="profile" element={<ProfilePage />} />
@@ -33,7 +32,6 @@ export default function AppRoutes() {
             <Route path="manageusers" element={<ManageUsers />} />
           </Route>
         </Routes>
-      </BrowserRouter>
     </>
   );
 }
