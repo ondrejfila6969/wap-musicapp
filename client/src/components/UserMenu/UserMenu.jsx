@@ -1,10 +1,18 @@
 import React, { useState, useRef, useEffect } from "react";
 import { User } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthProvider";
+
 
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
+  const { logout } = useAuth();
+
+  const handleLogout = () =>{
+    logout();
+    alert("Log Out Succesful");
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -29,21 +37,21 @@ export default function UserMenu() {
         <div className="absolute right-0 z-90 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg">
           <ul className="py-2" onClick={() => setIsOpen((prev) => !prev)}>
             <Link to={"/profile"}>
-              <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">
+              <div className="px-4 py-2 hover:bg-gray-900 text-center cursor-pointer">
                 Profile
-              </li>
+              </div>
             </Link>
 
             <Link to={"/settings"}>
-              <li className="px-4 py-2 hover:bg-gray-900 cursor-pointer">
+              <div className="px-4 py-2 text-center hover:bg-gray-900 cursor-pointer">
                 Settings
-              </li>
+              </div>
             </Link>
 
             <Link to={"/"}>
-              <li className="px-4 py-2 hover:bg-red-800 cursor-pointer bg-red-900">
+              <button className="px-4 py-2 hover:bg-red-800 w-full cursor-pointer bg-red-900" onClick={handleLogout}>
                 Log Out
-              </li>
+              </button>
             </Link>
           </ul>
         </div>

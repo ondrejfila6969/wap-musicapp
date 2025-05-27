@@ -12,7 +12,6 @@ export default function Player() {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Vypočítej barvu podle obalu
   useEffect(() => {
     if (!currentSong?.cover) return;
     const fac = new FastAverageColor();
@@ -21,7 +20,6 @@ export default function Player() {
     });
   }, [currentSong?.cover]);
 
-  // Načti a přehraj skladbu
   useEffect(() => {
     if (!currentSong?.url) return;
 
