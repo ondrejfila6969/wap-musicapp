@@ -14,6 +14,11 @@ const playlistSchema = mongoose.Schema({
     enum: ["album", "playlist"],
     required: true,
   },
+  visibility: {
+    type: String,
+    enum: ["public", "private"],
+    default: "public",
+  }
 });
 
 module.exports = mongoose.model("Playlist", playlistSchema);

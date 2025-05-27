@@ -19,6 +19,7 @@ mongoose
 import playlistRouter from "./routes/playlist/playlist";
 import songRouter from "./routes/song/song";
 import userRouter from "./routes/user/user";
+import searchRouter from "./routes/search/search";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use("/pfps", express.static(path.join(__dirname, "../public/pfps/")));
 app.use("/api/user", userRouter);
 app.use("/api/playlist", playlistRouter);
 app.use("/api/song", songRouter);
+app.use("/api/search", searchRouter);
 
 // Catch 404 and forward to error handler
 app.use((req: Request, res: Response, next: NextFunction) => {
