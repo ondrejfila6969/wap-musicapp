@@ -81,12 +81,12 @@ export default function RegisterForm() {
             Register
           </button>
 
-          <p className="text-sm text-center text-gray-300 mt-2">
+          <div className="text-sm text-center text-gray-300 mt-2">
             Do you already have an account?{" "}
             <Link to={"/signin"}>
               <div className="text-blue-400 underline">Sign In</div>
             </Link>
-          </p>
+          </div>
         </form>
         <p>{info}</p>
       </div>
