@@ -66,12 +66,12 @@ export default function SignInForm() {
             Sign-In
           </button>
 
-          <p className="text-sm text-center text-gray-300 mt-2">
+          <div className="text-sm text-center text-gray-300 mt-2">
             Are you new?{" "}
             <Link to={"/register"}>
                 <div className="text-blue-400 underline">Register</div>
             </Link>
-          </p>
+          </div>
         </form>
         <p>{info}</p>
       </div>

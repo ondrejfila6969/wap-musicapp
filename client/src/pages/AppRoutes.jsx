@@ -11,11 +11,13 @@ import ProfilePage from "./ProfilePage/ProfilePage";
 import Settings from "./Settings/Settings";
 import SearchResult from "./SearchResult/SearchResult";
 import CreateAlbum from "./CreateAlbum/CreateAlbum";
+import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
 
 export default function AppRoutes() {
   return (
     <>
-        <Routes>
+      <Routes>
+        <Route element={<PrivateRoute />}>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="*" element={<Error />} />
@@ -24,14 +26,15 @@ export default function AppRoutes() {
             <Route path="settings" element={<Settings />} />
             <Route path="search" element={<SearchResult />} />
           </Route>
-          <Route path="signin" element={<SignInPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="/admin/*" element={<AdminLayout />}>
-            <Route index element={<AdminHome />} />
-             {/*<Route path="/manageUsers" element={<ManageUsers />} /> */}
-            <Route path="manageusers" element={<ManageUsers />} />
-          </Route>
-        </Routes>
+        </Route>
+        <Route path="signin" element={<SignInPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="/admin/*" element={<AdminLayout />}>
+          <Route index element={<AdminHome />} />
+          {/*<Route path="/manageUsers" element={<ManageUsers />} /> */}
+          <Route path="manageusers" element={<ManageUsers />} />
+        </Route>
+      </Routes>
     </>
   );
 }
