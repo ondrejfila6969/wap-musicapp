@@ -59,7 +59,7 @@ export default function Player({ albumArtUrl, title, artist, songLength }) {
         className={`w-32 h-32 relative ${isPlaying ? "rotating" : "rotating paused"}`}
       >
         <img
-          src={"vinyl.png"}
+          src={"/vinyl.png"}
           alt="Vinyl"
           className="absolute w-full h-full object-contain"
         />

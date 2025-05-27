@@ -12,6 +12,7 @@ import Settings from "./Settings/Settings";
 import SearchResult from "./SearchResult/SearchResult";
 import CreateAlbum from "./CreateAlbum/CreateAlbum";
 import PrivateRoute from "../components/PrivateRoute/PrivateRoute";
+import PlaylistView from "./PlaylistView/PlaylistView";
 
 export default function AppRoutes() {
   return (
@@ -22,6 +23,7 @@ export default function AppRoutes() {
             <Route index element={<Home />} />
             <Route path="*" element={<Error />} />
             <Route path="createAlbum" element={<CreateAlbum />} />
+            <Route path="playlist/:id" element={<PlaylistView />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="search" element={<SearchResult />} />

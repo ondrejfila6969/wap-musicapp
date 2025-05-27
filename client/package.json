@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "@tailwindcss/vite": "^4.1.4",
     "fast-average-color": "^9.5.0",
     "howler": "^2.2.4",
@@ -19,6 +20,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.0",
     "react-scripts": "^5.0.1",
+    "redux": "^5.0.1",
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {

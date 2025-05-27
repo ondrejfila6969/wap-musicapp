@@ -10,13 +10,13 @@ export default function Library() {
       
       <div className="mt-5 overflow-y-scroll overflow-x-hidden flex-1 pr-2 library-wrapper">
         <div className="grid h-[200px] md:grid-cols-2 grid-cols-1 gap-4">
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 1"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 2"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 3"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 4"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 5"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 6"} />
-          <LibraryPlaylist imageUrl={"playlistCoverExample.png"} title={"Playlist Example 7"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 1"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 2"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 3"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 4"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 5"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 6"} />
+          <LibraryPlaylist imageUrl={"/playlistCoverExample.png"} title={"Playlist Example 7"} />
         </div>
       </div>
     </div>

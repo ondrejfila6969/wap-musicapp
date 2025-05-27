@@ -15,7 +15,7 @@ export default function Layout() {
         <div className="flex flex-col gap-4 ">
           <Library />
           <Player
-            albumArtUrl={"albumCoverExample.png"}
+            albumArtUrl={"/albumCoverExample.png"}
             artist={"Jablotron"}
             title={"Dreams"}
             songLength={100}
