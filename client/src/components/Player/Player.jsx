@@ -4,13 +4,23 @@ import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { FastAverageColor } from "fast-average-color";
 import "./Player.css";
 import { usePlayer } from "../../context/PlayerContext";
+import { useSettings } from "../../context/SettingsContext";
 
 export default function Player() {
-  const { currentSong, soundRef } = usePlayer();
+  const { currentSong, setCurrentSong, soundRef } = usePlayer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [avgColor, setAvgColor] = useState("#000000");
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const { settings } = useSettings();
+
+  function loadLastPlayedSong() {
+    const saved = localStorage.getItem("lastPlayedSong");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setCurrentSong(parsed);
+    }
+  }
 
   useEffect(() => {
     if (!currentSong?.cover) return;
@@ -19,6 +29,18 @@ export default function Player() {
       setAvgColor(color.hex);
     });
   }, [currentSong?.cover]);
+
+  useEffect(() => {
+    if (currentSong) {
+      localStorage.setItem("lastPlayedSong", JSON.stringify(currentSong));
+    }
+  }, [currentSong]);
+
+  useEffect(() => {
+    if (!currentSong) {
+      loadLastPlayedSong();
+    }
+  }, []);
 
   useEffect(() => {
     if (!currentSong?.url) return;
@@ -31,13 +53,16 @@ export default function Player() {
     const sound = new Howl({
       src: [currentSong.url],
       html5: true,
-      onload: () => {
-        setDuration(sound.duration());
-      },
+      volume: settings.volume,
+      rate: settings.playbackRate,
       onend: () => {
         setIsPlaying(false);
         setCurrentTime(0);
       },
+    });
+
+    sound.once("load", () => {
+      setDuration(sound.duration());
     });
 
     soundRef.current = sound;
@@ -55,7 +80,7 @@ export default function Player() {
       sound.stop();
       sound.unload();
     };
-  }, [currentSong]);
+  }, [currentSong, settings]);
 
   // Přepínání přehrávání
   const togglePlayback = () => {
