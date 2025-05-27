@@ -4,10 +4,11 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
+require("dotenv").config();
 
 mongoose
   .connect(
-    "mongodb+srv://admin:admin@cluster1.hsau5sp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1"
+    String(process.env.MONGODB_URL)
   )
   .then(() => {
     console.log("Database connected");

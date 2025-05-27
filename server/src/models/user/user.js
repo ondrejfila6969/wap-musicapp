@@ -1,20 +1,18 @@
 const mongoose = require("mongoose");
 
 const userSchema = mongoose.Schema({
-  userName: {
+  first_name: {type: String, required: true},
+  last_name: {type: String, required: true},
+  password: { type: String, required: true },
+  email: {
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator: (input) => {
-        return input.length >= 1 && input.length <= 20;
-      },
-      message: "Username must be between 1 and 20 characters long.",
-    },
+    match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
   },
   pfpSrc: {
     type: String,
-    required: true,
+    required: false,
     default: "http://localhost:3000/defaultImages/default_Pfp.png",
   },
 });
