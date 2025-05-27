@@ -25,6 +25,7 @@ body {
   user-select: none;
 }
 
+
 body::-webkit-scrollbar {
   width: var(5px)
 }
