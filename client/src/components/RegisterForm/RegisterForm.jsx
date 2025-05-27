@@ -40,28 +40,15 @@ export default function RegisterForm() {
         <form className="flex flex-col gap-4">
           <div>
             <label htmlFor="username" className="block mb-1 text-sm">
-              First name
+              Username
             </label>
             <input
               type="text"
-              name="first_name"
+              name="username"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
               required onChange={handleInput}
             />
           </div>
-
-          <div>
-            <label htmlFor="username" className="block mb-1 text-sm">
-              Last name
-            </label>
-            <input
-              type="text"
-              name="last_name"
-              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
-              required onChange={handleInput}
-            />
-          </div>
-
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               Email
@@ -101,6 +88,7 @@ export default function RegisterForm() {
             </Link>
           </p>
         </form>
+        <p>{info}</p>
       </div>
     </div>
   );
