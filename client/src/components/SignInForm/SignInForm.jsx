@@ -73,6 +73,7 @@ export default function SignInForm() {
             </Link>
           </p>
         </form>
+        <p>{info}</p>
       </div>
     </div>
   );
