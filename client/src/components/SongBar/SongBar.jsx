@@ -9,7 +9,7 @@ export default function SongBar({id, title, artist, duration}) {
   const [clicked, setClicked] = useState(false);
   return (
         <div
-      className="flex items-center justify-between px-4 py-2 hover:bg-neutral-800 transition-colors text-white text-sm"
+      className="flex items-center justify-between px-4 py-2 hover:bg-neutral-800 transition-colors text-white rounded-xl text-sm"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >

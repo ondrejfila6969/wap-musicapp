@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../../api"; // nebo axios přímo
+import api from "../../api";
+import { usePlayer } from "../../context/PlayerContext";
 
-export default function PlaylistView({playlistID}) {
-  const { id } = useParams(); // album ID z URL
+export default function PlaylistView({ playlistID }) {
+  const { id } = useParams();
   const [album, setAlbum] = useState(null);
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { setCurrentSong } = usePlayer();
+  
 
   useEffect(() => {
     const fetchAlbumAndSongs = async () => {
@@ -19,11 +22,11 @@ export default function PlaylistView({playlistID}) {
         setAlbum(albumData);
 
         // Získání všech písniček podle ID
-        console.log(albumData)
+        console.log(albumData);
         const songPromises = albumData.songs.map((songId) =>
           api.get(`/song/${songId}`)
         );
-        console.log("after")
+        console.log("after");
         const songResponses = await Promise.all(songPromises);
         console.log("Song responses:", songResponses);
         const songData = songResponses.map((res) => res.data.payload);
@@ -47,13 +50,13 @@ export default function PlaylistView({playlistID}) {
   }
 
   return (
-    <div className="p-6 text-white space-y-6">
+    <div className="text-white space-y-6">
       {/* Informace o albu */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-6 p-15 bg-stone-900 rounded-t-3xl">
         <img
           src={album.cover}
           alt={album.name}
-          className="w-40 h-40 object-cover rounded-lg shadow-lg"
+          className="w-50 h-50 object-cover rounded-lg shadow-lg"
         />
         <div>
           <h1 className="text-3xl font-bold">{album.name}</h1>
@@ -65,11 +68,20 @@ export default function PlaylistView({playlistID}) {
       </div>
 
       {/* Seznam písniček */}
-      <div className="space-y-2">
+      <div className="space-y-2 p-4">
         {songs.map((song, index) => (
           <div
             key={song._id}
-            className="flex items-center justify-between bg-white/10 hover:bg-white/20 p-3 rounded-lg transition"
+            className="flex items-center justify-between bg-white/10 hover:bg-white/20 p-3 rounded-lg transition cursor-pointer"
+            onClick={() =>
+              setCurrentSong({
+                url: `${song.songSrc}`, // nebo song.url
+                title: song.songName,
+                artist: song.artistName,
+                cover: song.cover || album.cover,
+                duration: song.duration,
+              })
+            }
           >
             <div className="flex items-center gap-4">
               <span className="text-sm text-white/60 w-5">{index + 1}</span>
