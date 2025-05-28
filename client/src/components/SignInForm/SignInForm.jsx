@@ -13,7 +13,7 @@ export default function SignInForm() {
     const res = await loginUser(formData);
     if (res.status === 200) {
       login(res.token);
-      alert("success", "Logged in succesfully.");
+      // alert("success", "Logged in succesfully.");
       navigate("/");
     }
     setInfo(res.message);
