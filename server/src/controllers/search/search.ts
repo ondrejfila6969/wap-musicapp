@@ -24,16 +24,11 @@ export const MainSearch = async (
       type: "album",
     }).limit(4);
 
-    const songs = await Song.find({
-      songName: { $regex: term, $options: "i" },
-    }).limit(4);
-
     res.json({
       payload: {
         users,
         playlists,
         albums,
-        songs,
       },
     });
   } catch (error) {

@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const playlistSchema = mongoose.Schema({
+const playlistSchema = new mongoose.Schema({
   userId: {
     type: Number,
     ref: "User",
@@ -21,4 +21,4 @@ const playlistSchema = mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model("Playlist", playlistSchema);
+export default mongoose.model("Playlist", playlistSchema);

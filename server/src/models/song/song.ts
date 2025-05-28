@@ -1,9 +1,14 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const songSchema = mongoose.Schema({
+const songSchema = new mongoose.Schema({
   uploadedby: {
     type: Number,
     ref: "User",
+    required: true,
+  },
+  albumId :{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Playlist",
     required: true,
   },
   artistName: {
@@ -23,4 +28,4 @@ const songSchema = mongoose.Schema({
   numberOfStreams: { type: Number, default: 0 },
 });
 
-module.exports = mongoose.model("Song", songSchema);
+export default mongoose.model("Song", songSchema);

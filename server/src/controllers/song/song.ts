@@ -47,7 +47,7 @@ export const createSong = [
     console.log("Song uploaded to folder");
 
     if (!req.file) {
-      console.log("no file")
+      console.log("no file");
       return res.status(500).json({ message: "File didn't upload" });
     }
 
@@ -68,6 +68,7 @@ export const createSong = [
 
     console.log(albumid);
     const album = await Playlist.findById(albumid);
+    if (!album) return res.status(500).json({ message: "Error creating song" });
     const albumCover = album?.cover;
 
     try {
@@ -78,6 +79,7 @@ export const createSong = [
       console.log("before db");
       const song = new Song({
         uploadedby: userid, //change this in model to object id in model when userauth is working
+        albumId: album._id,
         artistName: "e", //chanage change change cahanneehqeqwheqwheqwehqwehqwheqwehqwheqwehqwehqwhqwehqwheqwheqwheqwhe
         collabArtists,
         songCover: albumCover,
@@ -92,7 +94,7 @@ export const createSong = [
       await Playlist.findByIdAndUpdate(
         album._id,
         { $push: { songs: song._id } },
-        { new: true } 
+        { new: true }
       );
       return res.status(200).send("Song created");
     } catch (error: any) {

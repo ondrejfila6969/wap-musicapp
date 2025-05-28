@@ -29,11 +29,13 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
+    console.log("register")
     const { username, email, password } = req.body;
 
     if (!(username && email && password))
       return res.status(400).send({ message: "All fields are required!" });
 
+    console.log("1")
     const userExist = await User.findOne({ email });
     if (userExist)
       return res
@@ -48,10 +50,11 @@ exports.register = async (req, res) => {
       password: hashedPassword,
     });
 
+    console.log("3")
     const token = jwt.sign({ userId: user._id, email }, process.env.TOKEN_KEY, {
       expiresIn: "2h",
     });
-
+    console.log(4)
     res.status(201).json({ token, user: { username, email } });
   } catch (err) {
     res.status(500).json({ error: err.message });
