@@ -4,30 +4,38 @@ import { useAuth } from "../../context/AuthProvider";
 import { registerUser } from "../../models/user";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState()
+  const [formData, setFormData] = useState();
   const [info, setInfo] = useState();
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const sendData = async () => {
-    const emailRegex = /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
-    if (!emailRegex.test(formData.email)) return setInfo("Invalid email format");
+    const emailRegex =
+      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+    if (!emailRegex.test(formData.email)) {
+      return setInfo("Invalid email format");
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      console.log(1);
+      return setInfo("Passwords do not match");
+    }
 
     const res = await registerUser(formData);
     if (res.status === 201) {
       login(res.token);
-      // alert("REGISTER SUCCESS !");
       return navigate("/");
     }
     setInfo(res.message);
-  }
+  };
 
   const handleInput = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
-  }
+  };
 
   const handleButton = (e) => {
     e.preventDefault();
@@ -46,7 +54,8 @@ export default function RegisterForm() {
               type="text"
               name="username"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
-              required onChange={handleInput}
+              required
+              onChange={handleInput}
             />
           </div>
           <div>
@@ -57,7 +66,8 @@ export default function RegisterForm() {
               type="email"
               name="email"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
-              required onChange={handleInput}
+              required
+              onChange={handleInput}
             />
           </div>
 
@@ -69,7 +79,21 @@ export default function RegisterForm() {
               type="password"
               name="password"
               className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
-              required onChange={handleInput}
+              required
+              onChange={handleInput}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block mb-1 text-sm">
+              Confirm password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+              required
+              onChange={handleInput}
             />
           </div>
 
