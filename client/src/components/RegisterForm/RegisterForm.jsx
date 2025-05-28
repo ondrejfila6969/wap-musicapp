@@ -16,7 +16,7 @@ export default function RegisterForm() {
     const res = await registerUser(formData);
     if (res.status === 201) {
       login(res.token);
-      alert("REGISTER SUCCESS !");
+      // alert("REGISTER SUCCESS !");
       return navigate("/");
     }
     setInfo(res.message);
