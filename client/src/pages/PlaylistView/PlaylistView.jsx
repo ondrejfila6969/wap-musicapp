@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
+import "./PlaylistView.css"
 import { usePlayer } from "../../context/PlayerContext";
 
 export default function PlaylistView({ playlistID }) {
@@ -50,7 +51,7 @@ export default function PlaylistView({ playlistID }) {
   }
 
   return (
-    <div className="text-white space-y-6">
+    <div className="playlView-wrapper space-y-6 overflow-y-auto h-[calc(96vh-6rem)]">
       {/* Informace o albu */}
       <div className="flex items-center gap-6 p-15 bg-stone-900 rounded-t-3xl">
         <img

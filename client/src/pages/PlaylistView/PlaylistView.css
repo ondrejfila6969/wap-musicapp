@@ -1,0 +1,19 @@
+.playlView-wrapper {
+    --sb-track-color: #333333;
+    --sb-thumb-color: #5f5f5f;
+    --sb-size: 5px;
+}
+
+.playlView-wrapper::-webkit-scrollbar {
+    width: var(--sb-size);
+}
+
+.playlView-wrapper::-webkit-scrollbar-track {
+    background: var(--sb-track-color);
+    border-radius: 20px;
+}
+
+.playlView-wrapper::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb-color);
+    border-radius: 20px;
+}

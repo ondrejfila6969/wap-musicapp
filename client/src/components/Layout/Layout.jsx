@@ -10,7 +10,7 @@ export default function Layout() {
     <PlayerProvider>
       <div className="text-white p-4 grid h-screen">
         <Header />
-        <div className="grid grid-rows md:grid-cols-[75%_1fr] gap-4">
+        <div className="grid grid-rows md:grid-cols-[70%_1fr] gap-4">
           <div className="sonus-bg-linear-gradient rounded-3xl h-[calc(100vh-6rem)]">
             <Outlet />
           </div>

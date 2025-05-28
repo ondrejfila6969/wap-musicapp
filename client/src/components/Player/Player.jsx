@@ -135,7 +135,7 @@ export default function Player() {
         />
       </div>
 
-      <div className="flex flex-col flex-1 text-white font-doto">
+      <div className="flex flex-col flex-1 text-white">
         <div>
           <h2 className="text-2xl">{currentSong.title}</h2>
           <p className="text-lm">{currentSong.artist}</p>
