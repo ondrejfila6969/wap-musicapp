@@ -8,8 +8,7 @@ export default function SearchBar() {
   const [loadedData, setLoadedData] = useState({
     users: [],
     playlists: [],
-    albums: [],
-    songs: [],
+    albums: []
   });
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -31,7 +30,7 @@ export default function SearchBar() {
           setLoading(false);
         }
       } else {
-        setLoadedData({ users: [], playlists: [], albums: [], songs: [] });
+        setLoadedData({ users: [], playlists: [], albums: [] });
         setIsDropdownOpen(false);
       }
     }, 300);
@@ -83,14 +82,9 @@ export default function SearchBar() {
             <div>
               <h3 className="font-semibold mb-2">Users</h3>
               {users.map((user) => (
-                <Link to={`/${user.userName}`} key={user._id}>
+                <Link to={`/${user.username}`} key={user._id}>
                   <div className="flex items-center gap-3 py-2 border-b border-white/10 hover:bg-white/10 rounded-md px-2 transition">
-                    <img
-                      src={user.pfpSrc}
-                      alt={`${user.displayName}'s profile`}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <span>{user.displayName}</span>
+                    <div>{user.username}</div>
                   </div>
                 </Link>
               ))}
@@ -119,20 +113,6 @@ export default function SearchBar() {
                 <Link to={`/playlist/${pl._id}`} key={pl._id}>
                   <div className="py-2 px-2 border-b border-white/10 hover:bg-white/10 rounded-md transition">
                     {pl.name}
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
-
-          {/* SONGS */}
-          {songs.length > 0 && (
-            <div>
-              <h3 className="font-semibold mb-2">🎶 Songs</h3>
-              {songs.map((song) => (
-                <Link to={`/song/${song._id}`} key={song._id}>
-                  <div className="py-2 px-2 border-b border-white/10 hover:bg-white/10 rounded-md transition">
-                    {song.songName} by {song.artistName}
                   </div>
                 </Link>
               ))}

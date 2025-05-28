@@ -11,7 +11,7 @@ export const MainSearch = async (
   const { term } = req.params;
   try {
     const users = await User.find({
-      userName: { $regex: term, $options: "i" },
+      username: { $regex: term, $options: "i" },
     }).limit(3);
 
     const playlists = await Playlist.find({

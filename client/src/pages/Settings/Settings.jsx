@@ -5,26 +5,26 @@ export default function Settings() {
 
   return (
     <div className="p-8">
-      <h2 className="text-xl mb-4">Nastavení přehrávače</h2>
+      <h2 className="text-2xl font-bold mb-6 border-b pb-2 border-stone-600">Nastavení přehrávače</h2>
 
-      <label className="block mb-2">
-        Rychlost přehrávání:
+      <div className="mb-6">
+        <label className="block mb-2 font-medium">Rychlost přehrávání</label>
         <select
           value={settings.playbackRate}
           onChange={(e) =>
             setSettings({ ...settings, playbackRate: parseFloat(e.target.value) })
           }
-          className="ml-2 bg-stone-900 text-white"
+          className="w-full p-2 rounded bg-stone-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
         >
           <option value="0.5">0.5×</option>
-          <option value="1">1× (normální)</option>
+          <option value="1">1× (normal)</option>
           <option value="1.5">1.5×</option>
           <option value="2">2×</option>
         </select>
-      </label>
+      </div>
 
-      <label className="block mb-2">
-        Hlasitost:
+      <div className="mb-4">
+        <label className="block mb-2 font-medium">Hlasitost: {(settings.volume * 100).toFixed(0)}%</label>
         <input
           type="range"
           min="0"
@@ -34,8 +34,9 @@ export default function Settings() {
           onChange={(e) =>
             setSettings({ ...settings, volume: parseFloat(e.target.value) })
           }
+          className="w-full accent-purple-500"
         />
-      </label>
+      </div>
     </div>
   );
 }

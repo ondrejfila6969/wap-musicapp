@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { User } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
 
@@ -8,10 +8,11 @@ export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const handleLogout = () =>{
     logout();
-    alert("Log Out Succesful");
+     navigate(`/signin`);
   }
 
   useEffect(() => {
@@ -48,11 +49,9 @@ export default function UserMenu() {
               </div>
             </Link>
 
-            <Link to={"/"}>
               <button className="px-4 py-2 hover:bg-red-800 w-full cursor-pointer bg-red-900" onClick={handleLogout}>
                 Log Out
               </button>
-            </Link>
           </ul>
         </div>
       )}
