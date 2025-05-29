@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
-import "./PlaylistView.css"
+import "./PlaylistView.css";
 import { usePlayer } from "../../context/PlayerContext";
 
 export default function PlaylistView({ playlistID }) {
@@ -9,8 +9,7 @@ export default function PlaylistView({ playlistID }) {
   const [album, setAlbum] = useState(null);
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { setCurrentSong } = usePlayer();
-  
+  const { setCurrentSong, setQueue } = usePlayer();
 
   useEffect(() => {
     const fetchAlbumAndSongs = async () => {
@@ -74,15 +73,27 @@ export default function PlaylistView({ playlistID }) {
           <div
             key={song._id}
             className="flex items-center justify-between bg-white/10 hover:bg-white/20 p-3 rounded-lg transition cursor-pointer"
-            onClick={() =>
+            onClick={() => {
+              const queueSlice = songs.slice(index + 1);
+
               setCurrentSong({
-                url: `${song.songSrc}`, // nebo song.url
+                url: song.songSrc,
                 title: song.songName,
                 artist: song.artistName,
                 cover: song.cover || album.cover,
                 duration: song.duration,
-              })
-            }
+              });
+
+              setQueue(
+                queueSlice.map((s) => ({
+                  url: s.songSrc,
+                  title: s.songName,
+                  artist: s.artistName,
+                  cover: s.cover || album.cover,
+                  duration: s.duration,
+                }))
+              );
+            }}
           >
             <div className="flex items-center gap-4">
               <span className="text-sm text-white/60 w-5">{index + 1}</span>

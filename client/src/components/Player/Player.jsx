@@ -2,16 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import { Howl } from "howler";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { FastAverageColor } from "fast-average-color";
-import "./Player.css";
 import { usePlayer } from "../../context/PlayerContext";
 import { useSettings } from "../../context/SettingsContext";
 
 export default function Player() {
-  const { currentSong, setCurrentSong, soundRef } = usePlayer();
+  const {
+    currentSong,
+    setCurrentSong,
+    soundRef,
+    queue,
+    setQueue,
+    history,
+    setHistory,
+  } = usePlayer();
   const [isPlaying, setIsPlaying] = useState(false);
   const [avgColor, setAvgColor] = useState("#000000");
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [rotation, setRotation] = useState(0);
   const { settings } = useSettings();
 
   function loadLastPlayedSong() {
@@ -58,6 +66,13 @@ export default function Player() {
       onend: () => {
         setIsPlaying(false);
         setCurrentTime(0);
+
+        if (queue.length > 0) {
+          const next = queue[0];
+          setHistory((prev) => [...prev, currentSong]);
+          setCurrentSong(next);
+          setQueue(queue.slice(1));
+        }
       },
     });
 
@@ -71,7 +86,9 @@ export default function Player() {
 
     const interval = setInterval(() => {
       if (sound.playing()) {
-        setCurrentTime(sound.seek());
+        const current = sound.seek();
+        setCurrentTime(current);
+        setRotation(current * 20); // rychlost otáčení
       }
     }, 500);
 
@@ -82,7 +99,23 @@ export default function Player() {
     };
   }, [currentSong, settings]);
 
-  // Přepínání přehrávání
+  const handleSkipForward = () => {
+    if (queue.length > 0) {
+      setHistory((prev) => [...prev, currentSong]);
+      setCurrentSong(queue[0]);
+      setQueue(queue.slice(1));
+    }
+  };
+
+  const handleSkipBack = () => {
+    if (history.length > 0) {
+      const previous = history[history.length - 1];
+      setQueue((prev) => [currentSong, ...prev]);
+      setCurrentSong(previous);
+      setHistory((prev) => prev.slice(0, -1));
+    }
+  };
+
   const togglePlayback = () => {
     const sound = soundRef.current;
     if (!sound) return;
@@ -96,14 +129,13 @@ export default function Player() {
     setIsPlaying(!isPlaying);
   };
 
-  // Přetáčení sliderem
   const handleSeek = (e) => {
     const seekTime = parseFloat(e.target.value);
     soundRef.current.seek(seekTime);
     setCurrentTime(seekTime);
+    setRotation(seekTime * 20);
   };
 
-  // Formát mm:ss
   const formatTime = (seconds) => {
     if (isNaN(seconds)) return "0:00";
     const minutes = Math.floor(seconds / 60);
@@ -119,9 +151,11 @@ export default function Player() {
       style={{ background: `linear-gradient(to top, #080808, ${avgColor})` }}
     >
       <div
-        className={`w-32 h-32 relative ${
-          isPlaying ? "rotating" : "rotating paused"
-        }`}
+        className="w-32 h-32 relative"
+        style={{
+          transform: `rotate(${rotation}deg)`,
+          transition: isPlaying ? "transform 0.5s linear" : "none",
+        }}
       >
         <img
           src="/vinyl.png"
@@ -141,13 +175,11 @@ export default function Player() {
           <p className="text-lm">{currentSong.artist}</p>
         </div>
 
-        {/* Čas */}
         <div className="flex items-center justify-between w-full text-sm text-white px-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
 
-        {/* Slider */}
         <input
           type="range"
           min="0"
@@ -158,9 +190,8 @@ export default function Player() {
           className="w-full my-1 accent-gray-500 cursor-pointer"
         />
 
-        {/* Ovládání */}
         <div className="flex justify-center gap-6 mt-1">
-          <SkipBack cursor={"pointer"} />
+          <SkipBack cursor={"pointer"} onClick={handleSkipBack} />
           <button onClick={togglePlayback}>
             {isPlaying ? (
               <Pause cursor={"pointer"} />
@@ -168,7 +199,7 @@ export default function Player() {
               <Play cursor={"pointer"} />
             )}
           </button>
-          <SkipForward cursor={"pointer"} />
+          <SkipForward cursor={"pointer"} onClick={handleSkipForward} />
         </div>
       </div>
     </div>

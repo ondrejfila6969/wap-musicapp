@@ -1,4 +1,3 @@
-// context/PlayerContext.jsx
 import { createContext, useContext, useState, useRef } from "react";
 
 export const PlayerContext = createContext();
@@ -8,11 +7,23 @@ export function usePlayer() {
 }
 
 export function PlayerProvider({ children }) {
-  const [currentSong, setCurrentSong] = useState(null); // song: { url, title, artist, cover, duration }
+  const [currentSong, setCurrentSong] = useState(null);
+  const [queue, setQueue] = useState([]); // fronta nadcházejících písní
+  const [history, setHistory] = useState([]); // historie přehrávaných písní
   const soundRef = useRef(null);
 
   return (
-    <PlayerContext.Provider value={{ currentSong, setCurrentSong, soundRef }}>
+    <PlayerContext.Provider
+      value={{
+        currentSong,
+        setCurrentSong,
+        queue,
+        setQueue,
+        history,
+        setHistory,
+        soundRef,
+      }}
+    >
       {children}
     </PlayerContext.Provider>
   );
