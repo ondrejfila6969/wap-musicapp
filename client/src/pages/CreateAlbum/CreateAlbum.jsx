@@ -38,6 +38,7 @@ export default function CreateAlbum() {
       }
 
       alert("Album and songs uploaded successfully!");
+      window.location.reload();
     } catch (err) {
       console.error(err);
       alert("Error uploading album or songs");
