@@ -59,12 +59,11 @@ export const createSong = [
     }
 
     console.log("no missing data");
-    /*
+    
     const user = await User.findById(userid);
     if (!user) {
       return res.status(404).json({ message:"User not found" });
     }
-      */
 
     console.log(albumid);
     const album = await Playlist.findById(albumid);
@@ -75,10 +74,9 @@ export const createSong = [
         path.join(__dirname, `../../../public/songs/${req.file.filename}`)
       );
 
-      console.log("before db");
       const song = new Song({
         uploadedby: userid, //change this in model to object id in model when userauth is working
-        artistName: "e", //chanage change change cahanneehqeqwheqwheqwehqwehqwheqwehqwheqwehqwehqwhqwehqwheqwheqwheqwhe
+        artistName: user.username, //chanage change change cahanneehqeqwheqwheqwehqwehqwheqwehqwheqwehqwehqwhqwehqwheqwheqwheqwhe
         collabArtists,
         songCover: albumCover,
         songName,
@@ -88,7 +86,6 @@ export const createSong = [
       });
 
       await song.save();
-      console.log("after db");
       await Playlist.findByIdAndUpdate(
         album._id,
         { $push: { songs: song._id } },

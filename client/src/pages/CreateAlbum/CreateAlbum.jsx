@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../api";
 import "./CreateAlbum.css";
+import {useAuth} from "../../context/AuthProvider";
 
 export default function CreateAlbum() {
   const [albumName, setAlbumName] = useState("");
@@ -9,6 +10,8 @@ export default function CreateAlbum() {
   const [albumCover, setAlbumCover] = useState(null);
   const [songs, setSongs] = useState([]);
   const [previewCoverUrl, setPreviewCoverUrl] = useState(null);
+
+  const {user, isLoading} = useAuth();
 
   const handleAlbumSubmit = async (e) => {
     e.preventDefault();
@@ -33,7 +36,7 @@ export default function CreateAlbum() {
         songFormData.append("albumId", albumId);
 
         console.log("before upload");
-        await api.post(`/song/create/1/${albumId}`, songFormData);
+        await api.post(`/song/create/${user._id}/${albumId}`, songFormData);
         console.log("after upload");
       }
 
@@ -100,6 +103,12 @@ export default function CreateAlbum() {
       setReleaseYear(value);
     }
   };
+
+  
+  if(isLoading) {
+    return <div>Loading ...</div>
+  }
+
   return (
     <div className="overflow-y-auto crtAlb-wrapper h-[calc(96vh-6rem)]">
       <div className="p-15 bg-stone-900 rounded-t-3xl">
@@ -145,7 +154,7 @@ export default function CreateAlbum() {
               min="0"
               max="2025"
             />
-            <div className="text-xl mt-1">Artist_name</div>
+            <div className="text-xl mt-1">{user.username}</div>
           </div>
         </div>
       </div>

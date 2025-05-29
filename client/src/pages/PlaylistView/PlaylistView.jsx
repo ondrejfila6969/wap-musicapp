@@ -99,7 +99,7 @@ export default function PlaylistView({ playlistID }) {
               <span className="text-sm text-white/60 w-5">{index + 1}</span>
               <div>
                 <p className="font-semibold">{song.songName}</p>
-                <p className="text-white/60 text-sm">{song.artistName}</p>
+                <p className="text-white/60 text-sm"><span className="font-bold">{song.artistName}</span> {song.collabArtists && "ft. "+ song.collabArtists}</p>
               </div>
             </div>
             <span className="text-white/60 text-sm">{song.duration}</span>
