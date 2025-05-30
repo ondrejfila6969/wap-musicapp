@@ -23,11 +23,10 @@ export default function Library() {
   }, []);
 
   return (
-    <div className="flex-1 bg-gray-400 rounded-3xl sonus-bg-linear-gradient p-8 flex flex-col">
+    <div className="flex-1 sonus-bg-linear-gradient p-6 rounded-3xl flex flex-col overflow-hidden min-w-0 max-w-full">
       <LibraryHeader />
-
-      <div className="mt-5 overflow-y-scroll overflow-x-auto flex-1 pr-2 library-wrapper">
-        <div className="grid h-[200px] 2xl:grid-cols-2 md:grid-cols-1 auto-rows-auto gap-4">
+      <div className="mt-5 overflow-y-auto flex-1 pr-2 library-wrapper min-w-0 max-w-full">
+        <div className="grid gap-4 grid-cols-1 2xl:grid-cols-2 auto-rows-auto min-w-0 max-w-full">
           {playlists.map((playlist) => (
             <LibraryPlaylist
               key={playlist._id}

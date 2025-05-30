@@ -147,11 +147,11 @@ export default function Player() {
 
   return (
     <div
-      className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex gap-4 font-body"
+      className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex flex-wrap gap-4 font-body min-w-0"
       style={{ background: `linear-gradient(to top, #080808, ${avgColor})` }}
     >
       <div
-        className="w-32 h-32 relative"
+        className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32"
         style={{
           transform: `rotate(${rotation}deg)`,
           transition: isPlaying ? "transform 0.5s linear" : "none",
@@ -165,17 +165,17 @@ export default function Player() {
         <img
           src={currentSong.cover}
           alt="Album"
-          className="absolute top-1/2 left-1/2 w-18 h-18 rounded-full object-cover transform -translate-x-1/2 -translate-y-1/2 z-10"
+          className="absolute top-1/2 left-1/2 w-14 h-14 sm:w-18 sm:h-18 rounded-full object-cover transform -translate-x-1/2 -translate-y-1/2 z-10"
         />
       </div>
 
-      <div className="flex flex-col flex-1 text-white">
+      <div className="flex flex-col flex-1 text-white min-w-0">
         <div>
-          <h2 className="text-2xl">{currentSong.title}</h2>
-          <p className="text-lm">{currentSong.artist}</p>
+          <h2 className="text-xl sm:text-2xl truncate">{currentSong.title}</h2>
+          <p className="text-sm sm:text-lm truncate">{currentSong.artist}</p>
         </div>
 
-        <div className="flex items-center justify-between w-full text-sm text-white px-1">
+        <div className="flex items-center justify-between w-full text-xs sm:text-sm text-white px-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -190,9 +190,9 @@ export default function Player() {
           className="w-full my-1 accent-gray-500 cursor-pointer"
         />
 
-        <div className="flex justify-center gap-6 mt-1">
+        <div className="flex justify-center gap-4 sm:gap-6 mt-1 flex-wrap">
           <SkipBack cursor={"pointer"} onClick={handleSkipBack} />
-          <button onClick={togglePlayback}>
+          <button onClick={togglePlayback} className="flex-shrink-0">
             {isPlaying ? (
               <Pause cursor={"pointer"} />
             ) : (

@@ -43,9 +43,9 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="flex justify-left items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
-      <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md">
-        <form className="flex flex-col gap-4">
+    <div className="flex justify-center items-center w-full px-4 pb-12 sm:pb-0">
+      <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md flex flex-col gap-4">
+        <form className="flex flex-col gap-4 w-full">
           <div>
             <label htmlFor="username" className="block mb-1 text-sm">
               Username
@@ -58,6 +58,7 @@ export default function RegisterForm() {
               onChange={handleInput}
             />
           </div>
+
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               Email
@@ -85,8 +86,8 @@ export default function RegisterForm() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block mb-1 text-sm">
-              Confirm password
+            <label htmlFor="confirmPassword" className="block mb-1 text-sm">
+              Confirm Password
             </label>
             <input
               type="password"
@@ -112,7 +113,7 @@ export default function RegisterForm() {
             </Link>
           </div>
         </form>
-        <p>{info}</p>
+        <p className="text-center text-sm text-white break-words">{info}</p>
       </div>
     </div>
   );

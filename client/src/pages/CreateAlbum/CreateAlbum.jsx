@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import api from "../../api";
 import "./CreateAlbum.css";
-import {useAuth} from "../../context/AuthProvider";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function CreateAlbum() {
   const [albumName, setAlbumName] = useState("");
@@ -11,7 +11,7 @@ export default function CreateAlbum() {
   const [songs, setSongs] = useState([]);
   const [previewCoverUrl, setPreviewCoverUrl] = useState(null);
 
-  const {user, isLoading} = useAuth();
+  const { user, isLoading } = useAuth();
 
   const handleAlbumSubmit = async (e) => {
     e.preventDefault();
@@ -104,70 +104,72 @@ export default function CreateAlbum() {
     }
   };
 
-  
-  if(isLoading) {
-    return <div>Loading ...</div>
+  if (isLoading) {
+    return <div>Loading ...</div>;
   }
 
   return (
-    <div className="overflow-y-auto crtAlb-wrapper h-[calc(96vh-6rem)]">
-      <div className="p-15 bg-stone-900 rounded-t-3xl">
-        <div className="flex flex-row">
+        <div className="overflow-y-auto crtAlb-wrapper h-[calc(96vh-6rem)]">
+      <div className="p-6 bg-stone-900 rounded-t-3xl">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
           {/* ALBUM COVER PREVIEW */}
-          <div className="w-[200px] h-[200px] rounded-xl bg-stone-800">
+          <div className="w-[200px] h-[200px] rounded-xl bg-stone-800 flex-shrink-0 mx-auto lg:mx-0">
             {previewCoverUrl ? (
               <img
                 src={previewCoverUrl}
                 alt="Album Cover Preview"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-xl"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-white text-sm">
+              <div className="w-full h-full flex items-center justify-center text-white text-sm rounded-xl">
                 Album cover
               </div>
             )}
           </div>
 
           {/* ALBUM NAME AND YEAR */}
-          <div className="flex flex-col mt-auto ml-5">
+          <div className="flex flex-col flex-grow space-y-3 mt-4 lg:mt-0">
             {/* INPUT FOR COVER */}
             <input
               type="file"
               name="albumCoverFile"
-              className="mt-auto mb-2 cursor-pointer bg-gradient-to-r from-gray-900 cursor-pointer w-max rounded-xl to-gray-800 hover:to-gray-700 p-2"
+              className="cursor-pointer bg-gradient-to-r from-gray-900 to-gray-800 hover:to-gray-700 p-2 rounded-xl w-max"
               accept="image/*"
               onChange={(e) => setAlbumCover(e.target.files[0])}
             />
+
             <input
               type="text"
-              className="text-5xl px-4 py-2 bg-[#121212] rounded-xl focus:outline-none text-white"
+              className="text-3xl md:text-5xl px-4 py-2 bg-[#121212] rounded-xl focus:outline-none text-white w-full max-w-lg"
               placeholder="Album Name"
               value={albumName}
               onChange={(e) => setAlbumName(e.target.value)}
             />
+
             <input
               type="number"
-              className="text-md mt-1 px-4 py-2 bg-[#121212] rounded-xl focus:outline-none text-white"
+              className="text-md px-4 py-2 bg-[#121212] rounded-xl focus:outline-none text-white max-w-xs"
               placeholder="Year of Release"
               value={releaseYear}
               onChange={handleYearChange}
               min="0"
               max="2025"
             />
+
             <div className="text-xl mt-1">{user.username}</div>
           </div>
         </div>
       </div>
 
-      <div className="p-8">
-        <h2 className="text-3xl">Create Album</h2>
+      <div className="p-6 md:p-8">
+        <h2 className="text-3xl mb-6">Create Album</h2>
 
         {songs.map((song, index) => (
           <div
             key={index}
-            className="bg-[#121212] p-4 my-4 flex flex-row justify-between rounded-xl"
+            className="bg-[#121212] p-4 my-4 rounded-xl flex flex-col md:flex-row md:items-center md:justify-between gap-4"
           >
-            <span className="my-auto ml-2">{index + 1}</span>
+            <span className="md:mr-4">{index + 1}</span>
             <input
               type="text"
               placeholder="Song Name"
@@ -175,6 +177,7 @@ export default function CreateAlbum() {
               onChange={(e) =>
                 updateSongField(index, "songName", e.target.value)
               }
+              className="flex-grow md:flex-auto px-3 py-2 rounded-md bg-[#222] text-white focus:outline-none"
             />
             <input
               type="text"
@@ -183,8 +186,10 @@ export default function CreateAlbum() {
               onChange={(e) =>
                 updateSongField(index, "collabArtists", e.target.value)
               }
+              className="flex-grow md:flex-auto px-3 py-2 rounded-md bg-[#222] text-white focus:outline-none"
             />
-            <div className="">
+
+            <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4">
               <input
                 type="file"
                 id={`songFile-${index}`}
@@ -196,26 +201,25 @@ export default function CreateAlbum() {
               />
               <label
                 htmlFor={`songFile-${index}`}
-                className="cursor-pointer bg-gradient-to-r from-gray-900 cursor-pointer to-blue-900 hover:to-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 inline-block"
+                className="cursor-pointer bg-gradient-to-r from-gray-900 to-blue-900 hover:to-blue-600 text-white px-4 py-2 rounded-xl inline-block whitespace-nowrap"
               >
                 {song.songFile ? song.songFile.name : "Upload Song File"}
               </label>
 
-              {/* Remove button */}
-
               <button
                 onClick={() => removeSong(index)}
-                className="bg-gradient-to-r cursor-pointer ml-3 from-gray-900 to-yellow-900 hover:to-yellow-600 mt-2 text-white px-4 py-2 rounded-xl"
+                className="bg-gradient-to-r from-gray-900 to-yellow-900 hover:to-yellow-600 text-white px-4 py-2 rounded-xl whitespace-nowrap"
               >
                 Remove Song
               </button>
             </div>
           </div>
         ))}
-        <div className="flex flex-row justify-between">
+
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mt-6">
           <button
             onClick={addNewSongForm}
-            className="bg-gradient-to-r cursor-pointer ml-3 from-gray-900 to-green-900 hover:to-green-600 px-4 py-2 text-white rounded-xl"
+            className="bg-gradient-to-r from-gray-900 to-green-900 hover:to-green-600 px-4 py-2 text-white rounded-xl w-full sm:w-auto"
           >
             Add Song
           </button>
@@ -223,7 +227,7 @@ export default function CreateAlbum() {
           <button
             onClick={handleAlbumSubmit}
             disabled={!isFormValid}
-            className={`rounded-xl font-semibold text-white transition cursor-pointer py-2 w-2xl ${
+            className={`rounded-xl font-semibold text-white transition cursor-pointer py-2 w-full sm:w-48 ${
               isFormValid
                 ? "bg-gradient-to-r from-gray-900 to-blue-900 hover:opacity-90"
                 : "bg-gray-600 cursor-not-allowed"

@@ -1,2 +1,0 @@
-MONGODB_URL = "mongodb+srv://admin:admin@cluster1.hsau5sp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1"
-TOKEN_KEY = "CykDL0pCo3avUstliA0whmTFv5QBwkohLXtAgfmkavMaj9qtiZ5w0tbMRASEcl6A"
