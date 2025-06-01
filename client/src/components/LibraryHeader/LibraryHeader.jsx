@@ -5,8 +5,8 @@ import { Library } from "lucide-react";
 
 export default function LibraryHeader() {
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex items-center text-xl">
+    <div className="flex justify-between">
+      <div className="w-30 h-10 flex row text-xl items-center justify-center">
         <Library />
         <p className="ml-2">Library</p>
       </div>

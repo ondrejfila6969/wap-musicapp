@@ -31,9 +31,9 @@ export default function SignInForm() {
     sendData();
   };
   return (
-    <div className="flex justify-center items-center w-full px-4 pb-12 sm:pb-0">
-      <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md flex flex-col gap-4">
-        <form className="flex flex-col gap-4 w-full">
+    <div className="flex justify-center items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
+      <div className="bg-gradient-to-b from-[#1a1a1a] to-[#2e2e2e] bg-opacity-90 p-8 rounded-3xl shadow-lg w-full max-w-md">
+        <form className="flex flex-col gap-4">
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               Email
@@ -41,7 +41,8 @@ export default function SignInForm() {
             <input
               type="email"
               name="email"
-              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white placeholder-gray-400"
+              placeholder="you@example.com"
               required
               onChange={handleInput}
             />
@@ -54,7 +55,8 @@ export default function SignInForm() {
             <input
               type="password"
               name="password"
-              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white"
+              className="w-full px-4 py-2 bg-[#2e2e2e] rounded-full focus:outline-none text-white placeholder-gray-400"
+              placeholder="••••••••"
               required
               onChange={handleInput}
             />
@@ -62,7 +64,7 @@ export default function SignInForm() {
 
           <button
             type="submit"
-            className="bg-gradient-to-r from-gray-900 to-green-900 rounded-full py-2 font-semibold text-white hover:opacity-90 transition cursor-pointer"
+            className="bg-gradient-to-r from-gray-800 to-green-700 rounded-full py-2 font-semibold text-white hover:opacity-90 transition duration-200"
             onClick={handleButton}
           >
             Sign-In
@@ -71,11 +73,15 @@ export default function SignInForm() {
           <div className="text-sm text-center text-gray-300 mt-2">
             Are you new?{" "}
             <Link to={"/register"}>
-              <div className="text-blue-400 underline">Register</div>
+              <span className="text-blue-400 underline hover:text-blue-300 transition">
+                Register
+              </span>
             </Link>
           </div>
         </form>
-        <p className="text-center text-sm text-white break-words">{info}</p>
+        {info && (
+          <p className="mt-4 text-center text-sm text-red-400">{info}</p>
+        )}
       </div>
     </div>
   );

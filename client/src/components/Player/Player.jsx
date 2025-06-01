@@ -147,11 +147,11 @@ export default function Player() {
 
   return (
     <div
-      className="bg-gray-400 rounded-3xl items-center p-3 h-50 flex flex-wrap gap-4 font-body min-w-0"
+      className="bg-gray-800 rounded-3xl p-4 flex flex-col sm:flex-row items-center gap-4 shadow-lg"
       style={{ background: `linear-gradient(to top, #080808, ${avgColor})` }}
     >
       <div
-        className="relative flex-shrink-0 w-24 h-24 sm:w-32 sm:h-32"
+        className="w-32 h-32 relative flex-shrink-0"
         style={{
           transform: `rotate(${rotation}deg)`,
           transition: isPlaying ? "transform 0.5s linear" : "none",
@@ -165,17 +165,17 @@ export default function Player() {
         <img
           src={currentSong.cover}
           alt="Album"
-          className="absolute top-1/2 left-1/2 w-14 h-14 sm:w-18 sm:h-18 rounded-full object-cover transform -translate-x-1/2 -translate-y-1/2 z-10"
+          className="absolute top-1/2 left-1/2 w-20 h-20 rounded-full object-cover transform -translate-x-1/2 -translate-y-1/2 z-10"
         />
       </div>
 
-      <div className="flex flex-col flex-1 text-white min-w-0">
-        <div>
-          <h2 className="text-xl sm:text-2xl truncate">{currentSong.title}</h2>
-          <p className="text-sm sm:text-lm truncate">{currentSong.artist}</p>
+      <div className="flex flex-col flex-1 text-white w-full">
+        <div className="mb-1">
+          <h2 className="text-xl font-semibold">{currentSong.title}</h2>
+          <p className="text-sm text-gray-300">{currentSong.artist}</p>
         </div>
 
-        <div className="flex items-center justify-between w-full text-xs sm:text-sm text-white px-1">
+        <div className="flex justify-between text-xs text-gray-400 mb-1">
           <span>{formatTime(currentTime)}</span>
           <span>{formatTime(duration)}</span>
         </div>
@@ -187,19 +187,19 @@ export default function Player() {
           value={currentTime}
           onChange={handleSeek}
           step="0.1"
-          className="w-full my-1 accent-gray-500 cursor-pointer"
+          className="w-full accent-gray-500 cursor-pointer"
         />
 
-        <div className="flex justify-center gap-4 sm:gap-6 mt-1 flex-wrap">
-          <SkipBack cursor={"pointer"} onClick={handleSkipBack} />
-          <button onClick={togglePlayback} className="flex-shrink-0">
+        <div className="flex justify-center gap-6 mt-2">
+          <SkipBack className="cursor-pointer" onClick={handleSkipBack} />
+          <button onClick={togglePlayback}>
             {isPlaying ? (
-              <Pause cursor={"pointer"} />
+              <Pause className="cursor-pointer" />
             ) : (
-              <Play cursor={"pointer"} />
+              <Play className="cursor-pointer" />
             )}
           </button>
-          <SkipForward cursor={"pointer"} onClick={handleSkipForward} />
+          <SkipForward className="cursor-pointer" onClick={handleSkipForward} />
         </div>
       </div>
     </div>
