@@ -8,13 +8,15 @@ import { PlayerProvider } from "../../context/PlayerContext";
 export default function Layout() {
   return (
     <PlayerProvider>
-      <div className="text-white p-4 grid h-screen">
+      <div className="text-white p-4 min-h-screen flex flex-col gap-4 bg-black">
         <Header />
-        <div className="grid grid-rows md:grid-cols-[70%_1fr] gap-4">
-          <div className="sonus-bg-linear-gradient rounded-3xl h-[calc(100vh-6rem)]">
+
+        <div className="grid gap-4 md:grid-cols-[2fr_1fr] flex-1">
+          <div className="sonus-bg-linear-gradient rounded-3xl h-full overflow-hidden">
             <Outlet />
           </div>
-          <div className="flex flex-col gap-4 ">
+
+          <div className="flex flex-col gap-4 min-h-0">
             <Library />
             <Player
               albumArtUrl={"/albumCoverExample.png"}

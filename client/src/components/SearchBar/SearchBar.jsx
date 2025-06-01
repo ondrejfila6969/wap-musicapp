@@ -8,7 +8,7 @@ export default function SearchBar() {
   const [loadedData, setLoadedData] = useState({
     users: [],
     playlists: [],
-    albums: []
+    albums: [],
   });
   const [loading, setLoading] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -41,10 +41,7 @@ export default function SearchBar() {
   // Zavřít dropdown při kliknutí mimo
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(event.target)
-      ) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
@@ -58,9 +55,9 @@ export default function SearchBar() {
   return (
     <div
       ref={wrapperRef}
-      className="relative w-xl p-2 h-10 rounded-full sonus-bg-linear-gradient flex items-center"
+      className="relative p-2 h-10 rounded-full sonus-bg-linear-gradient flex items-center w-full max-w-xl"
     >
-      <div className="w-full max-w-xl p-2 h-10 rounded-full sonus-bg-linear-gradient flex items-center">
+      <div className="w-full flex items-center px-2">
         <Search color="white" />
         <input
           type="text"
@@ -76,8 +73,7 @@ export default function SearchBar() {
 
       {/* Výsledky */}
       {!loading && searchTerm && isDropdownOpen && (
-        <div className="absolute z-50 top-12 w-full max-w-xl bg-white/10 backdrop-blur-md rounded-xl text-white p-4 space-y-4 shadow-lg border border-white/20">
-          {/* USERS */}
+        <div className="absolute z-50 top-12 w-full bg-white/10 backdrop-blur-md rounded-xl text-white p-4 space-y-4 shadow-lg border border-white/20">
           {users.length > 0 && (
             <div>
               <h3 className="font-semibold mb-2">Users</h3>
@@ -91,7 +87,6 @@ export default function SearchBar() {
             </div>
           )}
 
-          {/* PLAYLISTS */}
           {playlists.length > 0 && (
             <div>
               <h3 className="font-semibold mb-2">Playlists</h3>
@@ -105,7 +100,6 @@ export default function SearchBar() {
             </div>
           )}
 
-          {/* ALBUMS */}
           {albums.length > 0 && (
             <div>
               <h3 className="font-semibold mb-2">💿 Albums</h3>
@@ -119,7 +113,6 @@ export default function SearchBar() {
             </div>
           )}
 
-          {/* Žádné výsledky */}
           {users.length === 0 &&
             playlists.length === 0 &&
             albums.length === 0 &&

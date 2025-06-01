@@ -3,17 +3,16 @@ import { User } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
 
-
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = () =>{
+  const handleLogout = () => {
     logout();
-     navigate(`/signin`);
-  }
+    navigate(`/signin`);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -27,6 +26,7 @@ export default function UserMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
+      {/* Ikona */}
       <div
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-10 h-10 rounded-full p-2 sonus-bg-linear-gradient cursor-pointer flex items-center justify-center"
@@ -34,24 +34,29 @@ export default function UserMenu() {
         <User />
       </div>
 
+      {/* Dropdown menu */}
       {isOpen && (
-        <div className="absolute right-0 z-90 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg">
-          <ul className="py-2" onClick={() => setIsOpen((prev) => !prev)}>
-            <Link to={"/profile"}>
+        <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg z-50">
+          <ul className="py-2 text-sm">
+            <Link to={"/profile"} onClick={() => setIsOpen(false)}>
               <div className="px-4 py-2 hover:bg-gray-900 text-center cursor-pointer">
                 Profile
               </div>
             </Link>
-
-            <Link to={"/settings"}>
-              <div className="px-4 py-2 text-center hover:bg-gray-900 cursor-pointer">
+            <Link to={"/settings"} onClick={() => setIsOpen(false)}>
+              <div className="px-4 py-2 hover:bg-gray-900 text-center cursor-pointer">
                 Settings
               </div>
             </Link>
-
-              <button className="px-4 py-2 hover:bg-red-800 w-full cursor-pointer bg-red-900" onClick={handleLogout}>
-                Log Out
-              </button>
+            <button
+              className="px-4 py-2 hover:bg-red-800 w-full bg-red-900 text-center"
+              onClick={() => {
+                handleLogout();
+                setIsOpen(false);
+              }}
+            >
+              Log Out
+            </button>
           </ul>
         </div>
       )}
