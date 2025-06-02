@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../../api";
 import "./PlaylistView.css";
 import { usePlayer } from "../../context/PlayerContext";
+import SongDropdown from "../../components/SongDropdown/SongDropdown";
 
 export default function PlaylistView({ playlistID }) {
   const { id } = useParams();
@@ -15,20 +16,13 @@ export default function PlaylistView({ playlistID }) {
     const fetchAlbumAndSongs = async () => {
       try {
         setLoading(true);
-
-        // Získání alba
         const albumRes = await api.get(`/playlist/${id}`);
         const albumData = albumRes.data.payload;
         setAlbum(albumData);
-
-        // Získání všech písniček podle ID
-        console.log(albumData);
         const songPromises = albumData.songs.map((songId) =>
           api.get(`/song/${songId}`)
         );
-        console.log("after");
         const songResponses = await Promise.all(songPromises);
-        console.log("Song responses:", songResponses);
         const songData = songResponses.map((res) => res.data.payload);
         setSongs(songData);
       } catch (err) {
@@ -59,8 +53,10 @@ export default function PlaylistView({ playlistID }) {
           className="w-50 h-50 object-cover rounded-lg shadow-lg"
         />
         <div>
-          <h1 className="text-3xl font-bold">{album.name}</h1>
-          <p className="text-white/70">{album.artistName}</p>
+          <h1 className="text-3xl font-bold mb-3">{album.name}</h1>
+          <Link to={`/profile/${album.username}`} className="text-white/70">
+            {album.username}
+          </Link>
           <p className="text-sm text-white/50 mt-2">
             {songs.length} song{songs.length !== 1 ? "s" : ""}
           </p>
@@ -99,8 +95,12 @@ export default function PlaylistView({ playlistID }) {
               <span className="text-sm text-white/60 w-5">{index + 1}</span>
               <div>
                 <p className="font-semibold">{song.songName}</p>
-                <p className="text-white/60 text-sm"><span className="font-bold">{song.artistName}</span> {song.collabArtists && "ft. "+ song.collabArtists}</p>
+                <p className="text-white/60 text-sm">
+                  <span className="font-bold">{song.artistName}</span>{" "}
+                  {song.collabArtists && "ft. " + song.collabArtists}
+                </p>
               </div>
+              <SongDropdown songId={song._id} />
             </div>
             <span className="text-white/60 text-sm">{song.duration}</span>
           </div>

@@ -24,7 +24,7 @@ export default function AppRoutes() {
             <Route path="*" element={<Error />} />
             <Route path="createAlbum" element={<CreateAlbum />} />
             <Route path="playlist/:id" element={<PlaylistView />} />
-            <Route path="profile" element={<ProfilePage />} />
+            <Route path="profile/:id" element={<ProfilePage />} />
             <Route path="settings" element={<Settings />} />
             <Route path="search" element={<SearchResult />} />
           </Route>

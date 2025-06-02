@@ -11,9 +11,12 @@ const userSchema = mongoose.Schema({
   },
   pfpSrc: {
     type: String,
-    required: false,
-    default: "http://localhost:3000/defaultImages/default_Pfp.png",
+    default: "http://localhost:3000/pfps/Default_pfp.png",
   },
+  isArtist:{
+    type: Boolean,
+    default: false
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);

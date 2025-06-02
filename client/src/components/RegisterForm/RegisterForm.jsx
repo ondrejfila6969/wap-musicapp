@@ -4,25 +4,25 @@ import { useAuth } from "../../context/AuthProvider";
 import { registerUser } from "../../models/user";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({});
   const [info, setInfo] = useState();
+  const [isArtist, setIsArtist] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const sendData = async () => {
     const emailRegex =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      /^[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
     if (!emailRegex.test(formData.email)) {
       return setInfo("Invalid email format");
     }
 
     if (formData.password !== formData.confirmPassword) {
-      console.log(1);
       return setInfo("Passwords do not match");
     }
 
-    const res = await registerUser(formData);
+    const res = await registerUser({ ...formData, isArtist });
     if (res.status === 201) {
       login(res.token);
       return navigate("/");
@@ -37,6 +37,10 @@ export default function RegisterForm() {
     }));
   };
 
+  const handleCheckbox = (e) => {
+    setIsArtist(e.target.checked);
+  };
+
   const handleButton = (e) => {
     e.preventDefault();
     sendData();
@@ -46,6 +50,7 @@ export default function RegisterForm() {
     <div className="flex justify-left items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
       <div className="sonus-bg-linear-gradient bg-opacity-50 p-8 rounded-3xl shadow-md w-full max-w-md">
         <form className="flex flex-col gap-4">
+          {/* Username */}
           <div>
             <label htmlFor="username" className="block mb-1 text-sm">
               Username
@@ -58,6 +63,8 @@ export default function RegisterForm() {
               onChange={handleInput}
             />
           </div>
+
+          {/* Email */}
           <div>
             <label htmlFor="email" className="block mb-1 text-sm">
               Email
@@ -71,6 +78,7 @@ export default function RegisterForm() {
             />
           </div>
 
+          {/* Password */}
           <div>
             <label htmlFor="password" className="block mb-1 text-sm">
               Password
@@ -84,9 +92,10 @@ export default function RegisterForm() {
             />
           </div>
 
+          {/* Confirm Password */}
           <div>
-            <label htmlFor="password" className="block mb-1 text-sm">
-              Confirm password
+            <label htmlFor="confirmPassword" className="block mb-1 text-sm">
+              Confirm Password
             </label>
             <input
               type="password"
@@ -95,6 +104,19 @@ export default function RegisterForm() {
               required
               onChange={handleInput}
             />
+          </div>
+
+          {/* Artist Checkbox */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isArtist"
+              name="isArtist"
+              onChange={handleCheckbox}
+            />
+            <label htmlFor="isArtist" className="text-sm text-white">
+              Artist
+            </label>
           </div>
 
           <button
@@ -106,7 +128,7 @@ export default function RegisterForm() {
           </button>
 
           <div className="text-sm text-center text-gray-300 mt-2">
-            Do you already have an account?{" "}
+            Do you already have an account? {" "}
             <Link to={"/signin"}>
               <div className="text-blue-400 underline">Sign In</div>
             </Link>
