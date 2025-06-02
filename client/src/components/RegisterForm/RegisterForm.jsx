@@ -4,25 +4,25 @@ import { useAuth } from "../../context/AuthProvider";
 import { registerUser } from "../../models/user";
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState();
+  const [formData, setFormData] = useState({});
   const [info, setInfo] = useState();
+  const [isArtist, setIsArtist] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const sendData = async () => {
     const emailRegex =
-      /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+      /^[a-z0-9!#$%&'*+/=?^_{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
     if (!emailRegex.test(formData.email)) {
       return setInfo("Invalid email format");
     }
 
     if (formData.password !== formData.confirmPassword) {
-      console.log(1);
       return setInfo("Passwords do not match");
     }
 
-    const res = await registerUser(formData);
+    const res = await registerUser({ ...formData, isArtist });
     if (res.status === 201) {
       login(res.token);
       return navigate("/");
@@ -35,6 +35,10 @@ export default function RegisterForm() {
       ...prev,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleCheckbox = (e) => {
+    setIsArtist(e.target.checked);
   };
 
   const handleButton = (e) => {
@@ -100,6 +104,18 @@ export default function RegisterForm() {
               required
               onChange={handleInput}
             />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isArtist"
+              name="isArtist"
+              onChange={handleCheckbox}
+            />
+            <label htmlFor="isArtist" className="text-sm text-white">
+              Artist
+            </label>
           </div>
 
           <button

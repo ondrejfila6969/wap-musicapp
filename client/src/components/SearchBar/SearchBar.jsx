@@ -78,7 +78,7 @@ export default function SearchBar() {
             <div>
               <h3 className="font-semibold mb-2">Users</h3>
               {users.map((user) => (
-                <Link to={`/${user.username}`} key={user._id}>
+                <Link to={`/profile/${user.username}`} key={user._id}>
                   <div className="flex items-center gap-3 py-2 border-b border-white/10 hover:bg-white/10 rounded-md px-2 transition">
                     <div>{user.username}</div>
                   </div>

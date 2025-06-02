@@ -4,23 +4,29 @@ import LibraryPlaylist from "../LibraryPlaylist/LibraryPlaylist";
 import api from "../../api"; // nebo axios.create instance
 import { useNavigate } from "react-router-dom";
 import "./Library.css";
+import {useAuth} from "../../context/AuthProvider"
 
 export default function Library() {
   const [playlists, setPlaylists] = useState([]);
   const navigate = useNavigate();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const res = await api.get("/playlist");
-        setPlaylists(res.data.payload); // přizpůsob, pokud je struktura jiná
-      } catch (err) {
-        console.error("Chyba při načítání playlistů:", err);
-      }
-    };
+      const fetchPlaylists = async () => {
+        try {
+          const res = await api.get(`/playlist/user/${user._id}`);
+          setPlaylists(res.data.payload);
+        } catch (err) {
+          console.error("Chyba při načítání playlistů:", err);
+        }
+      };
 
-    fetchPlaylists();
-  }, []);
+      if (!isLoading && user) {
+        fetchPlaylists();
+        console.log(user._id)
+      }
+    
+    }, [user, isLoading]);
 
   return (
     <div className="flex-1 bg-gray-400 rounded-3xl sonus-bg-linear-gradient p-8 flex flex-col">

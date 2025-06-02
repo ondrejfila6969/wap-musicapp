@@ -1,6 +1,11 @@
 const User = require("../../models/user/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { default: mongoose } = require("mongoose");
+const Playlist = require("../../models/playlist/playlist");
+const Song = require("../../models/song/song");
+
+
 
 exports.login = async (req, res) => {
   try {
@@ -29,31 +34,36 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, isArtist } = req.body;
 
-    if (!(username && email && password))
+    if (!(username && email && password)) {
       return res.status(400).send({ message: "All fields are required!" });
-
+    }
     const userExist = await User.findOne({ email });
-    if (userExist)
+    if (userExist) {
       return res
         .status(400)
         .send({ message: "This email is already registered." });
+    }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await User.create({
+    const user = new User({
       username,
       email: email.toLowerCase(),
       password: hashedPassword,
+      isArtist: !!isArtist, // Safely convert to boolean
     });
+
+    await user.save();
 
     const token = jwt.sign({ userId: user._id, email }, process.env.TOKEN_KEY, {
       expiresIn: "2h",
     });
-
-    res.status(201).json({ token, user: { username, email } });
+    res
+      .status(201)
+      .json({ token, user: { username, email, isArtist: user.isArtist } });
   } catch (err) {
+    console.error("Register error:", err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -76,8 +86,14 @@ exports.getUser = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
+  const id = req.params.id;
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    let user;
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      user = await User.findById(id).select("-password");
+    } else {
+      user = await User.findOne({ username: id }).select("-password");
+    }
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -87,5 +103,37 @@ exports.getUserById = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({ erorr: err.message });
+  }
+};
+
+exports.updateUsername = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    // Update the user document
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { username },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await Playlist.updateMany(
+      { userId: updatedUser._id },
+      { $set: { username: username } } 
+    );
+
+    await Song.updateMany(
+      { uploadedby: updatedUser._id },  
+      { $set: { artistName: username } }
+    );
+
+    res.status(200).json({ payload: updatedUser });
+  } catch (error) {
+    console.error("Error updating username:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };

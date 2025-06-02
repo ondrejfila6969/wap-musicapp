@@ -4,6 +4,7 @@ import User from "../../models/user/user";
 import fs from "fs";
 import path from "path";
 import albumCoverUpload from "./albumCoverUpload";
+import mongoose from "mongoose";
 
 const albumCover = albumCoverUpload.single("albumCoverFile");
 
@@ -58,6 +59,27 @@ export const getAllPlaylists = async (
   }
 };
 
+export const getAllPlaylistsByUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const data = await Playlist.find({ userId: req.params.userId });
+    if (data) {
+      return res.status(200).send({
+        message: "Playlists found",
+        payload: data,
+      });
+    }
+    res.status(404).send({
+      message: "Playlists not found",
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
+
 export const getPlaylistById = async (
   req: Request,
   res: Response,
@@ -88,12 +110,12 @@ export const createAlbum = [
     try {
       const coverFile = req.file?.filename || "Default_cover.png";
 
-      const user = await User.findOneById(userId);
+      const user = await User.findById(userId);
       if (!user) return res.status(404).send({ message: "User not found" });
 
       const data = new Playlist({
         userId: userId, //change this in model to object id in model when userauth is working
-        username : user.username,
+        username: user.username,
         name: albumName,
         type: "album",
         cover: `http://localhost:3000/albumCovers/${coverFile}`,
@@ -113,6 +135,72 @@ export const createAlbum = [
     }
   },
 ];
+
+export const addSongToPlaylist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { playlistId, songId } = req.params;
+
+  try {
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+      return res.status(404).send({ message: "Playlist not found" });
+    }
+
+    const songObjectId = new mongoose.Types.ObjectId(songId);
+
+    if (playlist.songs.some((id:mongoose.Types.ObjectId) => id.equals(songObjectId))) {
+      return res.status(400).send({ message: "Song already in playlist" });
+    }
+
+    playlist.songs.push(songObjectId);
+    const updatedPlaylist = await playlist.save();
+    res.status(200).send({
+      message: "Song added to playlist",
+      payload: updatedPlaylist,
+    });
+  } catch (err) {
+    console.log(err)
+    res.status(500).send(err);
+  }
+};
+
+export const createPlaylist = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req.params;
+  const { albumName } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).send({ message: "User not found" });
+
+    const data = new Playlist({
+      userId: userId,
+      username: user.username,
+      name: albumName,
+      type: "playlist",
+      cover: `http://localhost:3000/albumCovers/Default_cover.png`,
+    });
+
+    const result = await data.save();
+    if (result) {
+      return res.status(201).send({
+        message: "Playlist created",
+        payload: result,
+      });
+    }
+    res.status(404).send({
+      message: "Playlist not created",
+    });
+  } catch (e) {
+    res.status(500).send(e);
+  }
+};
 
 export const updatePlaylist = async (
   req: Request,

@@ -6,7 +6,7 @@ import { useAuth } from "../../context/AuthProvider";
 export default function UserMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -26,7 +26,6 @@ export default function UserMenu() {
 
   return (
     <div className="relative" ref={menuRef}>
-      {/* Ikona */}
       <div
         onClick={() => setIsOpen((prev) => !prev)}
         className="w-10 h-10 rounded-full p-2 sonus-bg-linear-gradient cursor-pointer flex items-center justify-center"
@@ -37,8 +36,8 @@ export default function UserMenu() {
       {/* Dropdown menu */}
       {isOpen && (
         <div className="absolute right-0 mt-2 w-40 bg-[#1a1a1a] text-white rounded-md shadow-lg z-50">
-          <ul className="py-2 text-sm">
-            <Link to={"/profile"} onClick={() => setIsOpen(false)}>
+          <ul className="py-2 text-sm" onClick={() => setIsOpen((prev) => !prev)}>
+            <Link to={`/profile/${user._id}`} onClick={() => setIsOpen(false)}>
               <div className="px-4 py-2 hover:bg-gray-900 text-center cursor-pointer">
                 Profile
               </div>
@@ -52,7 +51,6 @@ export default function UserMenu() {
               className="px-4 py-2 hover:bg-red-800 w-full bg-red-900 text-center"
               onClick={() => {
                 handleLogout();
-                setIsOpen(false);
               }}
             >
               Log Out

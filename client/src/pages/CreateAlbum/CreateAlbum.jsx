@@ -21,7 +21,7 @@ export default function CreateAlbum() {
 
     try {
       console.log("before album");
-      const res = await api.post(`/playlist/createAlbum/1`, albumFormData);
+      const res = await api.post(`/playlist/createAlbum/${user._id}`, albumFormData);
       console.log("after album");
       const albumId = res.data.payload._id;
 
