@@ -31,7 +31,7 @@ export default function SignInForm() {
     sendData();
   };
   return (
-    <div className="flex justify-center items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
+    <div className="flex justify-left items-center sm:w-1/2 w-full px-4 pb-12 sm:pb-0">
       <div className="bg-gradient-to-b from-[#1a1a1a] to-[#2e2e2e] bg-opacity-90 p-8 rounded-3xl shadow-lg w-full max-w-md">
         <form className="flex flex-col gap-4">
           <div>

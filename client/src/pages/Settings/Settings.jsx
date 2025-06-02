@@ -5,10 +5,10 @@ export default function Settings() {
 
   return (
     <div className="p-8">
-      <h2 className="text-2xl font-bold mb-6 border-b pb-2 border-stone-600">Nastavení přehrávače</h2>
+      <h2 className="text-2xl font-bold mb-6 border-b pb-2 border-stone-600">Settings</h2>
 
       <div className="mb-6">
-        <label className="block mb-2 font-medium">Rychlost přehrávání</label>
+        <label className="block mb-2 font-medium">Speed: </label>
         <select
           value={settings.playbackRate}
           onChange={(e) =>
@@ -24,7 +24,7 @@ export default function Settings() {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 font-medium">Hlasitost: {(settings.volume * 100).toFixed(0)}%</label>
+        <label className="block mb-2 font-medium">Volume: {(settings.volume * 100).toFixed(0)}%</label>
         <input
           type="range"
           min="0"
