@@ -78,60 +78,64 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="p-6 sm:p-10 bg-stone-900 max-w-screen-xl rounded-t-3xl mx-auto">
-      <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+    <div className="p-4 sm:p-10 lg:p-15 bg-stone-900 max-w-screen-xl mx-auto rounded-t-3xl">
+      <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
         <img
-          className="w-40 h-40 sm:w-48 sm:h-48 rounded-xl object-cover"
+          className="w-40 h-40 md:w-48 md:h-48 object-cover rounded-xl"
           src={user.pfpSrc}
           alt="Profile"
         />
 
-        <div className="flex flex-col w-full">
-          <div className="text-white text-sm mb-2">
-            {user.isArtist && "Artist"}
+        <div className="flex flex-col flex-1 w-full">
+          <div className="text-sm text-gray-400">
+            {user.isArtist && "artist"}
           </div>
 
           {isOwnProfile ? (
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="flex flex-col flex-grow">
+            <div className="flex flex-col gap-4 w-full mt-4">
+              {/* Upload file and username input */}
+              <div className="flex flex-col gap-3 w-full">
                 <input
                   type="file"
                   name="pfpFile"
                   onChange={handleFileChange}
-                  className="text-white mb-2"
+                  className="text-white"
                 />
                 <input
-                  className="text-3xl sm:text-5xl text-white bg-black rounded-xl px-4 py-2 w-full"
+                  className="text-2xl md:text-3xl lg:text-4xl bg-black text-white px-4 py-2 rounded-xl w-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                   value={newUsername}
                   onChange={(e) => setNewUsername(e.target.value)}
+                  placeholder="Username"
                 />
               </div>
-              <div className="flex flex-col gap-2 sm:items-start">
+
+              {/* Buttons under input */}
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
                 <button
                   onClick={handleUsernameChange}
-                  className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-xl"
+                  className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-xl w-full sm:w-auto"
                 >
                   Save Username
                 </button>
                 <button
                   onClick={handleUpload}
-                  className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-xl"
+                  className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-xl w-full sm:w-auto"
                 >
                   Save Profile Picture
                 </button>
               </div>
             </div>
           ) : (
-            <div className="text-3xl sm:text-5xl text-white mt-2 sm:mt-0 break-words">
+            <h1 className="text-3xl md:text-5xl mt-2 md:mt-0 break-words text-white">
               {user.username}
-            </div>
+            </h1>
           )}
         </div>
       </div>
 
       {playlists.length > 0 && (
         <div className="mt-10">
-          <h2 className="text-2xl sm:text-3xl text-white mb-4">
+          <h2 className="text-2xl md:text-3xl text-white mb-4">
             {user.isArtist ? "Albums" : "Playlists"}
           </h2>
           <Slider {...sliderSettings}>
@@ -146,7 +150,7 @@ export default function ProfilePage() {
                         alt={playlist.name}
                         className="mx-auto rounded mb-2 max-h-40 object-cover w-full"
                       />
-                      <h3 className="mt-2 font-bold text-lg truncate">
+                      <h3 className="mt-2 font-bold text-lg break-words">
                         {playlist.name}
                       </h3>
                     </div>
