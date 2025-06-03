@@ -3,6 +3,7 @@ import axios from "axios";
 import api from "../../api";
 import "./CreateAlbum.css";
 import { useAuth } from "../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateAlbum() {
   const [albumName, setAlbumName] = useState("");
@@ -11,6 +12,7 @@ export default function CreateAlbum() {
   const [songs, setSongs] = useState([]);
   const [previewCoverUrl, setPreviewCoverUrl] = useState(null);
 
+  const navigate = useNavigate();
   const { user, isLoading } = useAuth();
 
   const handleAlbumSubmit = async (e) => {
@@ -20,12 +22,8 @@ export default function CreateAlbum() {
     albumFormData.append("albumCoverFile", albumCover);
 
     try {
-      console.log("before album");
       const res = await api.post(`/playlist/createAlbum/${user._id}`, albumFormData);
-      console.log("after album");
       const albumId = res.data.payload._id;
-
-      console.log("next are songs");
 
       for (const song of songs) {
         const songFormData = new FormData();
@@ -41,6 +39,8 @@ export default function CreateAlbum() {
       }
 
       alert("Album and songs uploaded successfully!");
+      window.location.reload();
+      navigate(`/playlist/${albumId}`)
       window.location.reload();
     } catch (err) {
       console.error(err);
@@ -229,7 +229,7 @@ export default function CreateAlbum() {
           <button
             onClick={handleAlbumSubmit}
             disabled={!isFormValid}
-            className={`rounded-xl font-semibold text-white transition cursor-pointer py-3 w-full sm:w-auto whitespace-nowrap ${
+            className={`rounded-xl font-semibold text-white transition cursor-pointer px-4 py-3 w-full sm:w-auto whitespace-nowrap ${
               isFormValid
                 ? "bg-gradient-to-r from-gray-900 to-blue-900 hover:opacity-90"
                 : "bg-gray-600 cursor-not-allowed"

@@ -5,10 +5,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { useAuth } from "../../context/AuthProvider";
+import { Trash } from "lucide-react";
 
 export default function ProfilePage() {
   const { id } = useParams();
-  const { user: loggedInUser, fetchUser } = useAuth();
+  const { user: loggedInUser, fetchUser, logout } = useAuth();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [playlists, setPlaylists] = useState([]);
@@ -16,14 +17,18 @@ export default function ProfilePage() {
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
+    setIsLoading(true);
+    setUser(null);
+    setPlaylists([]);
+
+    const fetchUserData = async () => {
       try {
         const resUserData = await api.get(`/user/${id}`);
-        setUser(resUserData.data.payload);
-        setNewUsername(resUserData.data.payload.username);
-        const resPlaylists = await api.get(
-          `/playlist/user/${resUserData.data.payload._id}`
-        );
+        const fetchedUser = resUserData.data.payload;
+        setUser(fetchedUser);
+        setNewUsername(fetchedUser.username);
+
+        const resPlaylists = await api.get(`/playlist/user/${fetchedUser._id}`);
         setPlaylists(resPlaylists.data.payload);
       } catch (err) {
         console.error("Error fetching user:", err);
@@ -31,7 +36,7 @@ export default function ProfilePage() {
         setIsLoading(false);
       }
     };
-    fetchUser();
+    fetchUserData();
   }, [id]);
 
   const handleUsernameChange = async () => {
@@ -60,6 +65,17 @@ export default function ProfilePage() {
     }
   };
 
+  const handleDeleteUser = async () => {
+    if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+    try {
+      await api.delete(`/user/${user._id}`);
+      logout();
+      window.location.href = "/";
+    } catch (err) {
+      console.error("Failed to delete user:", err);
+    }
+  };
+
   if (isLoading) return <p>Loading user...</p>;
   if (!user) return <p>User not found.</p>;
 
@@ -67,10 +83,10 @@ export default function ProfilePage() {
 
   const sliderSettings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 400,
     slidesToShow: 4,
-    slidesToScroll: 1,
+    arrows: false,
     responsive: [
       { breakpoint: 1024, settings: { slidesToShow: 2 } },
       { breakpoint: 600, settings: { slidesToShow: 1 } },
@@ -94,13 +110,12 @@ export default function ProfilePage() {
 
             {isOwnProfile ? (
               <div className="flex flex-col gap-4 w-full mt-4">
-                {/* Upload file and username input */}
-                <div className="flex flex-col gap-3 w-full">
+                <div className="flex flex-col gap-3">
                   <input
                     type="file"
                     name="pfpFile"
                     onChange={handleFileChange}
-                    className="text-white"
+                    className="w-[20rem] bg-black hover:bg-black/30 text-white px-4 py-2 rounded-xl cursor-pointer"
                   />
                   <input
                     className="text-2xl md:text-3xl lg:text-4xl bg-black text-white px-4 py-2 rounded-xl w-full border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -109,20 +124,25 @@ export default function ProfilePage() {
                     placeholder="Username"
                   />
                 </div>
-
-                {/* Buttons under input */}
                 <div className="flex flex-col sm:flex-row gap-3 w-full">
                   <button
                     onClick={handleUsernameChange}
-                    className="bg-blue-700 hover:bg-blue-600 text-white px-4 py-2 rounded-xl w-full sm:w-auto"
+                    className="bg-black hover:bg-black/20 text-white cursor-pointer px-4 py-2 rounded-xl w-full sm:w-auto"
                   >
                     Save Username
                   </button>
                   <button
                     onClick={handleUpload}
-                    className="bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded-xl w-full sm:w-auto"
+                    className="bg-black hover:bg-black/20 text-white cursor-pointer px-4 py-2 rounded-xl w-full sm:w-auto"
                   >
                     Save Profile Picture
+                  </button>
+                  <button
+                    onClick={handleDeleteUser}
+                    className="bg-black hover:bg-black/20 text-white cursor-pointer px-4 py-2 rounded-xl w-full sm:w-auto flex items-center justify-center gap-2"
+                  >
+                    <Trash size={18} />
+                    Delete Account
                   </button>
                 </div>
               </div>
@@ -134,7 +154,8 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-      <div className="pl-8">
+
+      <div className="pl-">
         {playlists.length > 0 && (
           <div className="mt-10">
             <h2 className="text-2xl md:text-3xl text-white mb-4">

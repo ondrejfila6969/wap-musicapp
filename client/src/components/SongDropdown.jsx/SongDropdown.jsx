@@ -7,7 +7,7 @@ export default function SongDropdown({ songId }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [playlists, setPlaylists] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { user } = useAuth(); // Make sure user ID is accessible
+  const { user } = useAuth(); 
 
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -15,7 +15,7 @@ export default function SongDropdown({ songId }) {
       setLoading(true);
       try {
         console.log(user._id);
-        const res = await api.get(`/playlist/user/${user._id}`); // Adjust route as needed
+        const res = await api.get(`/playlist/user/${user._id}`);
         setPlaylists(res.data.payload || []);
       } catch (err) {
         console.error("Error loading playlists:", err);
@@ -59,14 +59,14 @@ export default function SongDropdown({ songId }) {
   return (
     <div className="relative inline-block text-left">
       <button
-        className="px-4 justify-right py-2 rounded-md shadow cursor-pointer"
+        className="px-4 justify-right py-2 rounded-md cursor-pointer"
         onClick={() => setShowDropdown((prev) => !prev)}
       >
         <CirclePlus />
       </button>
 
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-64 max-h-60 overflow-y-auto rounded-md bg-white shadow-lg ring-1 bg-stone-800 ring-black ring-opacity-5 z-50">
+        <div className="absolute right-0 mt-2 w-64 max-h-60 overflow-y-auto rounded-md shadow-lg ring-1 bg-stone-800 ring-black ring-opacity-5 z-50">
           {loading ? (
             <p className="p-4 text-gray-500">Loading playlists...</p>
           ) : (
@@ -75,7 +75,7 @@ export default function SongDropdown({ songId }) {
                 <div
                   key={playlist._id}
                   onClick={() => handleAddToPlaylist(playlist._id)}
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                  className="block px-4 py-2 text-sm text-white hover:bg-white/20 p-3 cursor-pointer"
                 >
                   {playlist.name}
                 </div>
@@ -85,7 +85,7 @@ export default function SongDropdown({ songId }) {
           <div className="border-t border-gray-200">
             <button
               onClick={handleCreateNewPlaylist}
-              className="w-full text-left px-4 py-2 text-sm text-blue-600 hover:bg-gray-50"
+              className="w-full text-left px-4 py-2 text-sm text-white hover:bg-white/20"
             >
               + Create New Playlist
             </button>

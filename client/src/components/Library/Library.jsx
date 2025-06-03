@@ -23,7 +23,6 @@ export default function Library() {
 
       if (!isLoading && user) {
         fetchPlaylists();
-        console.log(user._id)
       }
     
     }, [user, isLoading]);

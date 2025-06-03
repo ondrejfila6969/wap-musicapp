@@ -1,16 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import api from "../../api";
 import "./PlaylistView.css";
 import { usePlayer } from "../../context/PlayerContext";
-import SongDropdown from "../../components/SongDropdown.jsx/SongDropdown";
+import { useAuth } from "../../context/AuthProvider";
+import { Trash } from "lucide-react";
 
 export default function PlaylistView({ playlistID }) {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { user: loggedInUser, loading: loadingUser, fetchUser } = useAuth();
   const [album, setAlbum] = useState(null);
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { setCurrentSong, setQueue } = usePlayer();
+  const [newCover, setNewCover] = useState(null);
+
+  const handleCoverUpload = async () => {
+    if (!newCover) return;
+    try {
+      const formData = new FormData();
+      formData.append("playlistCoverFile", newCover);
+      await api.post(`/playlist/uploadPlaylistCover/${id}`, formData);
+      window.location.reload();
+    } catch (err) {
+      console.error("Failed to update album cover:", err);
+    }
+  };
+
+  useEffect(() => {
+    if (!loggedInUser && !loadingUser) {
+      fetchUser();
+    }
+  }, [loggedInUser, loadingUser, fetchUser]);
 
   useEffect(() => {
     const fetchAlbumAndSongs = async () => {
@@ -32,10 +54,31 @@ export default function PlaylistView({ playlistID }) {
       }
     };
 
-    fetchAlbumAndSongs();
+    if (id) {
+      fetchAlbumAndSongs();
+    }
   }, [id]);
 
-  if (loading) {
+  const handleDeleteSong = async (e, songId) => {
+    e.stopPropagation();
+    try {
+      await api.delete(`/song/${songId}`);
+      setSongs((prevSongs) => prevSongs.filter((s) => s._id !== songId));
+    } catch (err) {
+      console.error("Failed to delete song:", err);
+    }
+  };
+
+  const handleDeletePlaylist = async () => {
+    try {
+      await api.delete(`/playlist/${id}`);
+      navigate("/profile/" + loggedInUser.username);
+    } catch (err) {
+      console.error("Failed to delete playlist:", err);
+    }
+  };
+
+  if (loading || loadingUser || !loggedInUser) {
     return <p className="text-white p-4">Načítání alba...</p>;
   }
 
@@ -45,7 +88,6 @@ export default function PlaylistView({ playlistID }) {
 
   return (
     <div className="playlView-wrapper space-y-6 overflow-y-auto h-[calc(96vh-6rem)]">
-      {/* Informace o albu */}
       <div className="flex items-center gap-6 p-15 bg-stone-900 rounded-t-3xl">
         <img
           src={album.cover}
@@ -53,17 +95,44 @@ export default function PlaylistView({ playlistID }) {
           className="w-50 h-50 object-cover rounded-lg shadow-lg"
         />
         <div>
-          <h1 className="text-3xl font-bold mb-3">{album.name}</h1>
-          <Link to={`/profile/${album.username}`} className="text-white/70">
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold mb-3">{album.name}</h1>
+          </div>
+          <Link to={`/profile/${album.username}`} className="text-white/70 hover:underline">
             {album.username}
           </Link>
           <p className="text-sm text-white/50 mt-2">
             {songs.length} song{songs.length !== 1 ? "s" : ""}
           </p>
+          {album.userId === loggedInUser._id && (
+            <div className="flex flex-col">
+              <input
+                type="file"
+                accept="image/*"
+                name="playlistCoverFile"
+                onChange={(e) => setNewCover(e.target.files[0])}
+                className="bg-black hover:bg-black/30 text-white px-4 py-2 rounded-xl mt-2 w-full sm:w-auto flex items-center justify-center gap-2"
+              />
+              <div className="flex gap-10 mt-4 flex-row">
+                <button
+                  onClick={handleCoverUpload}
+                  className="bg-black hover:bg-black/30 text-white px-4 py-2 rounded-xl cursor-pointer"
+                >
+                  Upload New Cover
+                </button>
+                <button
+                  onClick={handleDeletePlaylist}
+                  className="bg-black hover:bg-black/30 text-white px-4 py-2 rounded-xl w-full sm:w-auto flex items-center justify-center gap-2"
+                >
+                  <Trash size={18} />
+                  Delete Album
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Seznam písniček */}
       <div className="space-y-2 p-4">
         {songs.map((song, index) => (
           <div
@@ -91,18 +160,26 @@ export default function PlaylistView({ playlistID }) {
               );
             }}
           >
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-white/60 w-5">{index + 1}</span>
-              <div>
-                <p className="font-semibold">{song.songName}</p>
-                <p className="text-white/60 text-sm">
-                  <span className="font-bold">{song.artistName}</span>{" "}
-                  {song.collabArtists && "ft. " + song.collabArtists}
-                </p>
+            <div className="flex items-center justify-between w-full gap-4">
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-white/60 w-5">{index + 1}</span>
+                <div>
+                  <p className="font-semibold">{song.songName}</p>
+                  <p className="text-white/60 text-sm">
+                    <span className="font-bold">{song.artistName}</span>{" "}
+                    {song.collabArtists && `ft. ${song.collabArtists}`}
+                  </p>
+                </div>
               </div>
-              <SongDropdown songId={song._id} />
+              {album.userId === loggedInUser._id && (
+                <button
+                  onClick={(e) => handleDeleteSong(e, song._id)}
+                  className="text-red-400 hover:text-red-600"
+                >
+                  <Trash size={18} />
+                </button>
+              )}
             </div>
-            <span className="text-white/60 text-sm">{song.duration}</span>
           </div>
         ))}
       </div>
