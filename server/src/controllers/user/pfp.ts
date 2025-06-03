@@ -6,20 +6,28 @@ import { Request, Response, NextFunction } from "express";
 
 const pfpFile = pfpController.single("pfpFile");
 
-export const saveFileIntoFolder = (req: Request, res: Response, next: NextFunction) => {
+export const saveFileIntoFolder = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   pfpFile(req, res, (err: any) => {
     if (err) {
       console.error("Multer error:", err);
-      return res.status(500).json({ message: err.message || "File upload error" });
+      return res
+        .status(500)
+        .json({ message: err.message || "File upload error" });
     }
     next();
   });
 };
 
 export const deletePhoto = async (filePath: string): Promise<void> => {
-  const defaultPath = path.join(__dirname, "../../../public/pfpFiles/Default_pfp.png");
+  const defaultPath = path.join(
+    __dirname,
+    "../../../public/pfps/Default_pfp.png"
+  );
   if (filePath === defaultPath) return;
-
   try {
     await fs.promises.unlink(filePath);
   } catch (err) {
@@ -36,7 +44,6 @@ export const uploadProfilePicture = [
         return res.status(400).json({ message: "No file uploaded" });
       }
 
-    console.log(1)
       const user = await User.findById(req.params.id);
       if (!user) {
         deletePhoto(
@@ -46,17 +53,13 @@ export const uploadProfilePicture = [
         return res.status(404).json({ message: "User not found" });
       }
 
-      console.log(2)
-      if (user.pfpSrc) {
-        await deletePhoto(
-          path.join(
-            __dirname,
-            `../../../public/pfps/${user.pfpSrc.substring(26)}`
-          )
-        );
-      }
-
-      console.log(3)
+      await deletePhoto(
+        path.join(
+          __dirname,
+          `../../../public/pfps/${user.pfpSrc.substring(26)}`
+        )
+      );
+      
       const newPath = `http://localhost:3000/pfps/${req.file.filename}`;
       user.pfpSrc = newPath;
       await user.save();

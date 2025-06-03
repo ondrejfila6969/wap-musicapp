@@ -10,6 +10,7 @@ router.post("/register", userControllers.register);
 router.get("/:id", userControllers.getUserById);
 router.put("/:id/pfp", pfpContoller.uploadProfilePicture);
 router.put("/:id", userControllers.updateUsername);
+router.delete("/:id", userControllers.deleteUser);
 
 
 module.exports = router;

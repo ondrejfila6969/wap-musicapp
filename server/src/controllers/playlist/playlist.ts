@@ -4,16 +4,35 @@ import User from "../../models/user/user";
 import fs from "fs";
 import path from "path";
 import albumCoverUpload from "./albumCoverUpload";
+import playlistCoverUpload from "./playlistCoverUpload";
 import mongoose from "mongoose";
 
 const albumCover = albumCoverUpload.single("albumCoverFile");
 
-export const saveFileIntoFolder = (
+export const saveFileIntoFolderAlbum = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   albumCover(req, res, (err: any) => {
+    if (err) {
+      console.error("Multer error:", err);
+      return res
+        .status(500)
+        .json({ message: err.message || "File upload error" });
+    }
+    next();
+  });
+};
+
+const playlistCover = playlistCoverUpload.single("playlistCoverFile");
+
+export const saveFileIntoFolderPlaylist = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  playlistCover(req, res, (err: any) => {
     if (err) {
       console.error("Multer error:", err);
       return res
@@ -102,7 +121,7 @@ export const getPlaylistById = async (
 };
 
 export const createAlbum = [
-  saveFileIntoFolder,
+  saveFileIntoFolderAlbum,
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.params;
     const { albumName } = req.body;
@@ -151,7 +170,11 @@ export const addSongToPlaylist = async (
 
     const songObjectId = new mongoose.Types.ObjectId(songId);
 
-    if (playlist.songs.some((id:mongoose.Types.ObjectId) => id.equals(songObjectId))) {
+    if (
+      playlist.songs.some((id: mongoose.Types.ObjectId) =>
+        id.equals(songObjectId)
+      )
+    ) {
       return res.status(400).send({ message: "Song already in playlist" });
     }
 
@@ -162,7 +185,7 @@ export const addSongToPlaylist = async (
       payload: updatedPlaylist,
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).send(err);
   }
 };
@@ -234,17 +257,60 @@ export const deletePlaylist = async (
   next: NextFunction
 ) => {
   try {
-    const result = await Playlist.findByIdAndDelete(req.params.id);
-    if (result) {
-      return res.status(200).send({
-        message: "Playlist deleted",
-        payload: result,
-      });
+    const playlist = await Playlist.findById(req.params.id);
+
+    if (!playlist) {
+      return res.status(404).send({ message: "Playlist not found" });
     }
-    res.status(404).send({
-      message: "Playlist not deleted",
+
+    await Promise.all(
+      playlist.songs.map(async (songId: mongoose.Types.ObjectId) => {
+        await Playlist.updateMany(
+          { songs: songId },
+          { $pull: { songs: songId } }
+        );
+      })
+    );
+
+    const result = await Playlist.findByIdAndDelete(req.params.id);
+
+    return res.status(200).send({
+      message: "Playlist deleted and songs removed from all playlists",
+      payload: result,
     });
   } catch (e) {
+    console.error("Error deleting playlist:", e);
     res.status(500).send(e);
   }
 };
+
+export const changingPlaylistCover = [
+  saveFileIntoFolderPlaylist,
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { playlistId } = req.params;
+
+    try {
+      const coverFile = req.file?.filename || "Default_cover.png";
+
+      const updatedPlaylist = await Playlist.findByIdAndUpdate(
+        playlistId,
+        {
+          cover: `http://localhost:3000/playlistCovers/${coverFile}`,
+        },
+        { new: true } 
+      );
+
+      if (!updatedPlaylist) {
+        return res.status(404).send({ message: "Playlist not found" });
+      }
+
+      return res.status(200).send({
+        message: "Playlist updated with new cover",
+        payload: updatedPlaylist,
+      });
+    } catch (error) {
+      console.error("Error adding cover to playlist:", error);
+      return res.status(500).send({ message: "Internal server error" });
+    }
+  },
+];

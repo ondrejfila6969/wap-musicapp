@@ -4,8 +4,8 @@ const jwt = require("jsonwebtoken");
 const { default: mongoose } = require("mongoose");
 const Playlist = require("../../models/playlist/playlist");
 const Song = require("../../models/song/song");
-
-
+const { deletePhoto } = require("./pfp");
+const path = require('path');
 
 exports.login = async (req, res) => {
   try {
@@ -123,17 +123,57 @@ exports.updateUsername = async (req, res) => {
 
     await Playlist.updateMany(
       { userId: updatedUser._id },
-      { $set: { username: username } } 
+      { $set: { username: username } }
     );
 
     await Song.updateMany(
-      { uploadedby: updatedUser._id },  
+      { uploadedby: updatedUser._id },
       { $set: { artistName: username } }
     );
 
     res.status(200).json({ payload: updatedUser });
   } catch (error) {
     console.error("Error updating username:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const playlists = await Playlist.find({ userId: id });
+
+    for (const playlist of playlists) {
+      for (const songId of playlist.songs) {
+        await Playlist.updateMany(
+          { songs: songId },
+          { $pull: { songs: songId } }
+        );
+        await Song.findByIdAndDelete(songId);
+      }
+      await Playlist.findByIdAndDelete(playlist._id);
+    }
+    const user = await User.findById(id);
+    await deletePhoto(
+      path.join(
+        __dirname,
+        `../../../public/pfps/${user.pfpSrc.substring(26)}`
+      )
+    );
+    await deletePhoto(
+      path.join(
+        __dirname,
+        `../../../public/albumCovers/${user.pfpSrc.substring(26)}`
+      )
+    );
+    await User.findByIdAndDelete(id);
+
+    res
+      .status(200)
+      .json({ message: "User, their playlists, and related songs deleted." });
+  } catch (error) {
+    console.error("Error deleting user and related data:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -35,6 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/songs", express.static(path.join(__dirname, "../public/songs")));
 app.use("/pfps", express.static(path.join(__dirname, "../public/pfps")));
 app.use("/albumCovers", express.static(path.join(__dirname, "../public/albumCovers")));
+app.use("/playlistCovers", express.static(path.join(__dirname, "../public/playlistCovers")));
 
 app.use("/api/user", userRouter);
 app.use("/api/playlist", playlistRouter);

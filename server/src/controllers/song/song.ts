@@ -25,7 +25,6 @@ const saveFileIntoFolder = (
 const getAudioDuration = async (filePath: string): Promise<number> => {
   try {
     const duration = await getAudioDurationInSeconds(filePath);
-    console.log("Duration (s):", duration);
     return duration;
   } catch (error: any) {
     console.error("Error reading duration:", error.message);
@@ -44,7 +43,6 @@ const deletePhoto = async (filePath: string): Promise<void> => {
 export const createSong = [
   saveFileIntoFolder,
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Song uploaded to folder");
 
     if (!req.file) {
       console.log("no file")
@@ -57,15 +55,12 @@ export const createSong = [
     if (!userid || !songName || !yearOfRelease) {
       return res.status(404).json({ message: "Missing data" });
     }
-
-    console.log("no missing data");
     
     const user = await User.findById(userid);
     if (!user) {
       return res.status(404).json({ message:"User not found" });
     }
 
-    console.log(albumid);
     const album = await Playlist.findById(albumid);
     const albumCover = album?.cover;
 
@@ -152,15 +147,25 @@ export const deleteSong = async (
   next: NextFunction
 ) => {
   try {
-    const result = await Song.findByIdAndDelete(req.params.id);
-    if (result) {
-      return res.status(200).send({
-        message: "Song deleted",
-        payload: result,
-      });
+    const songId = req.params.id;
+
+    const result = await Song.findByIdAndDelete(songId);
+
+    if (!result) {
+      return res.status(404).send({ message: "Song not found" });
     }
-    res.status(404).send({ message: "Song not deleted" });
+
+    await Playlist.updateMany(
+      { songs: songId },
+      { $pull: { songs: songId } }
+    );
+
+    return res.status(200).send({
+      message: "Song deleted and removed from all playlists",
+      payload: result,
+    });
   } catch (e) {
-    res.status(500).send(e);
+    console.error("Error deleting song:", e);
+    res.status(500).send({ message: "Internal server error", error: e });
   }
 };
